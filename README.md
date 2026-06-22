@@ -10,6 +10,7 @@ People using CLI agents like Codex, Claude Code, or any LLM agent that supports 
 
 - `dig` - Investigation-only mode for understanding bugs, features, or system behavior without making changes.
 - `adr-logger` - Log an Architectural Decision Record (ADR) entry while the agent is working.
+- `sviat-engineering` - Senior engineering thinking, development, debugging, and review process.
 
 ## Getting started
 
@@ -21,7 +22,7 @@ Install skills with your agent's installer and a GitHub URL:
 
 ## Repository structure
 
-- `dig/` and `adr-logger/` contain the source skill definitions (`SKILL.md`).
+- `dig/`, `adr-logger/`, and `sviat-engineering/` contain the source skill definitions.
 - `dist/` contains packaged `.skill` archives for distribution.
 
 ## Contributing
