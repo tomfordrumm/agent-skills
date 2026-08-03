@@ -1,0 +1,4 @@
+interface:
+  display_name: "Распаковать идею приложения"
+  short_description: "Превращает сырую идею в ясный Product Brief"
+  default_prompt: "Используй $unpack-product-idea, чтобы распаковать мою идею приложения и подготовить Product Brief."
