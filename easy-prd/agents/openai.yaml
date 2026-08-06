@@ -1,0 +1,4 @@
+interface:
+  display_name: "Easy PRD"
+  short_description: "Готовит адаптивный PRD и план реализации"
+  default_prompt: "Используй $easy-prd, чтобы превратить Product Brief в готовый к реализации PRD и план вертикальных слайсов."

@@ -12,6 +12,7 @@ People using CLI agents like Codex, Claude Code, or any LLM agent that supports 
 - `adr-logger` - Log an Architectural Decision Record (ADR) entry while the agent is working.
 - `sviat-engineering` - Senior engineering thinking, development, debugging, and review process.
 - `unpack-product-idea` - Turn a vague product idea into a clear Product Brief through a beginner-friendly adaptive interview.
+- `easy-prd` - Turn a Product Brief into an implementation-ready PRD, adaptive documentation, and vertical delivery slices.
 
 ## Getting started
 
