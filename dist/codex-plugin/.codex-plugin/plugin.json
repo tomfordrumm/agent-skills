@@ -1,0 +1,24 @@
+{
+  "name": "agent-skills",
+  "version": "0.1.0",
+  "description": "Portable skills for coding agents.",
+  "repository": "https://github.com/tomfordrumm/agent-skills.git",
+  "homepage": "https://github.com/tomfordrumm/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "agent-skills",
+    "codex",
+    "workflow"
+  ],
+  "interface": {
+    "displayName": "AgentSkills",
+    "shortDescription": "Portable skills for coding agents.",
+    "longDescription": "A curated collection of reusable skills for Codex and other coding agents.",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ]
+  },
+  "skills": "./skills/"
+}

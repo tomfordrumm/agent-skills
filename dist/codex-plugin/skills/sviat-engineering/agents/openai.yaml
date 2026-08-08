@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sviat Engineering"
+  short_description: "Senior engineering thinking and debugging process"
+  default_prompt: "Use $sviat-engineering to approach this task with senior engineering judgment before changing code."
