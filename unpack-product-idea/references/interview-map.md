@@ -1,189 +1,136 @@
-# Adaptive interview map
+# Interview map
 
-Use this map to choose questions, not as a questionnaire. Ask only about relevant uncertainty and phrase questions in the user's language.
+Use this map to find the next useful question. It is not a questionnaire. Skip any area that cannot change the product or first-version scope.
 
-## Completeness areas
+## Product and problem
 
-### 1. Product essence
+Establish what the product lets someone accomplish, why the owner wants it, and what situation creates the need.
 
-Determine:
-
-- what the product enables someone to accomplish;
-- why the owner wants to create it;
-- whether it is a personal tool, internal tool, customer product, marketplace, community, or automation.
+Ask how people handle the situation today and where that approach fails. Capture the problem as the owner's hypothesis unless supplied research supports it. Market validation is separate work.
 
 Useful question:
 
-> Представьте, что приложение уже работает. Что человек теперь может сделать такого, что сегодня для него сложно или невозможно?
+> Представьте, что продукт уже работает. Что человек теперь может сделать такого, что сегодня для него сложно или невозможно?
 
-### 2. Problem and current alternative
+Turn broad value claims into observable change. Replace "easy" or "convenient" with time saved, errors avoided, a completed task, a clearer decision, or access that did not exist before.
 
-Determine:
+## Audience and roles
 
-- what situation creates the problem;
-- how people handle it today;
-- what is slow, costly, confusing, risky, or impossible about the current method;
-- why solving it matters.
+Find the people who encounter the problem first or most often. Behavior and context matter more than invented demographic personas.
 
-Useful question:
-
-> Как человек решает эту задачу сейчас и в какой момент понимает, что нынешний способ его не устраивает?
-
-Do not require evidence of market demand. Capture claimed pain as the owner's hypothesis unless supported by supplied research.
-
-### 3. Audience
-
-Determine:
-
-- who experiences the problem most acutely;
-- their context, motivation, and relevant level of experience;
-- who uses the product versus who buys or approves it.
-
-If the answer is “everyone,” ask:
+If the answer is "everyone," ask:
 
 > Для кого эта проблема возникает чаще всего? Кому вы показали бы первую версию в первую очередь?
 
-Do not invent demographic personas when behavior or context is more useful.
+Separate the user from the buyer, approver, administrator, provider, or recipient only when those roles change the flow. For each relevant role, establish what they want, what they can see or change, and how their action affects someone else.
 
-### 4. Product value and outcome
+When accounts or authentication appear, identify the actual isolation model:
 
-Determine:
+- one person uses the product;
+- several people share one account or one common data space;
+- each person has a separate private account and data;
+- people collaborate inside a shared workspace with different permissions.
 
-- the result the user receives;
-- why the result is better than the current alternative;
-- what “success” looks like from the user's perspective.
+Do not turn "users need to sign in" into a multi-user or collaboration requirement without this distinction.
 
-Turn adjectives into observable change: less time, fewer errors, completed task, clearer decision, saved money, or access to something previously unavailable.
+## Main scenario
 
-### 5. Main scenario
+Reconstruct at least one real case from trigger to useful result:
 
-Reconstruct at least one end-to-end scenario:
-
-1. Who acts?
-2. What event or need starts the scenario?
-3. What does the person do first?
-4. What information do they provide or receive?
-5. What does the product do in response?
-6. What decisions, exceptions, or approvals occur?
-7. What marks successful completion?
-8. How often does this happen?
+1. who acts;
+2. what starts the situation;
+3. what the person does and what information they provide;
+4. how the product responds;
+5. which decisions or exceptions matter;
+6. what successful completion looks like.
 
 Ask through a story:
 
-> Возьмём один реальный случай. Что произошло перед тем, как человек открыл приложение, что он делает дальше по шагам и с каким результатом уходит?
+> Возьмем один реальный случай. Что произошло перед тем, как человек открыл приложение, что он делает дальше и с каким результатом уходит?
 
-### 6. Users and roles
+Identify the business objects that appear in this scenario, such as a task, booking, request, payment, document, message, or result. Describe their meaning, ownership, visibility, and lifecycle. Do not design tables or fields.
 
-Explore roles only when more than one actor may create, review, approve, buy, sell, administer, or receive information.
+## First useful version
 
-Determine for each relevant role:
+Classify candidate capabilities as:
 
-- what they want;
-- what they can see or change;
-- how their action affects another role.
-
-Avoid technical permission matrices at this stage.
-
-### 7. Core information
-
-Identify the business objects handled by the scenario, such as a user, task, booking, request, payment, document, message, or result.
-
-Ask what users create, receive, update, review, or retain. Describe meaning and lifecycle, not schemas or database fields.
-
-### 8. First useful version
-
-Classify capabilities into:
-
-- **Must have** — without it, the main scenario cannot deliver its result;
-- **Later** — valuable but unnecessary to prove the core outcome;
-- **Explicitly out** — deliberately excluded to protect scope or avoid ambiguity.
+- `must_have` when the main scenario cannot produce its result without them;
+- `later` when they add value but are unnecessary for the first complete result;
+- `out_of_scope` when exclusion protects the first version from ambiguity or expansion.
 
 Useful question:
 
-> Если через неделю готова только самая простая законченная версия, что она обязана позволить человеку сделать, чтобы вы сказали: «Да, это уже решает проблему»?
+> Если через неделю готова только самая простая законченная версия, что она обязана позволить человеку сделать, чтобы вы сказали: "Да, это уже решает проблему"?
 
-When the list is large, ask which single complete journey should work first. Do not confuse “minimal” with a disconnected demo; the first version must deliver an end-to-end unit of value.
+When the feature list is large, choose the first complete journey. A disconnected demo is not an MVP.
 
-### 9. Business context
+## Delivery expectations
 
-Ask only when relevant:
+Clarify what the owner expects to do with the first version when the answer could change scope or quality. Ask in ordinary language, for example:
 
-- who benefits and who pays;
-- what is sold and when payment occurs;
-- whether the goal is revenue, cost reduction, learning, lead generation, retention, or personal utility;
-- how the owner expects the product to reach users.
+> После первой версии вы хотите только показать идею, начать пользоваться приложением сами или выпустить его для людей, которые будут на него полагаться?
 
-Do not invent pricing or monetization. A project may intentionally have none.
+Useful distinctions are:
 
-### 10. Integrations and external actors
+- a demonstration used to explain or test an idea, where visible temporary substitutes may be acceptable;
+- a small working product intended for real use, with the main journey, real required integrations, and deployment working;
+- a dependable public, commercial, sensitive, or operational product that needs deeper release checks and support considerations.
 
-Explore services essential to the product outcome: payments, email, messaging, maps, calendars, AI models, files, import/export, company systems, or human operators.
+Do not assign a technical delivery profile during discovery. Record the user's intended use, required quality, and any acceptable temporary compromise in their own terms.
 
-Ask what information crosses the boundary and what happens when the external service fails. Do not select vendors unless an existing vendor is a confirmed constraint.
+Treat time as a separate constraint. If urgency, a workshop, a deadline, or an expectation of a very small build is mentioned but no usable limit is known, ask how much time is available from planning through a usable result. Do not ask for a time budget when it cannot change the first-version boundary. Never infer that a short timebox permits fake integrations, unsafe handling, or hidden limitations.
 
-### 11. Constraints and risk
+## Business context and success
 
-Ask only about constraints that can change product scope or experience:
+Ask about money, distribution, or organizational value only when it affects product behavior or scope. Useful facts may include who pays, when payment happens, whether the goal is revenue or saved labor, and how the first users will reach the product.
 
-- device or operating environment;
-- language, geography, accessibility, or connectivity;
-- deadline or budget boundary supplied by the user;
+Do not invent pricing, monetization, or target numbers.
+
+Define success through observable behavior or outcome. Examples include completing the main journey, returning to use the product, reducing manual steps, or producing an acceptable result.
+
+## Integrations, constraints, and risk
+
+Explore an external service only when the product depends on it. Ask what crosses the boundary and what happens when the service fails. Keep a confirmed vendor as a constraint, but do not select one during discovery.
+
+Ask about constraints that can change the product:
+
+- device, connectivity, language, geography, or accessibility;
+- a deadline, timebox, or budget that can change the first version;
 - sensitive personal, financial, health, child, or company data;
-- legal, safety, moderation, or human-review needs known to the user.
+- legal, safety, moderation, consent, retention, or human-review needs known to the user.
 
-Do not provide legal conclusions. Mark areas requiring specialist review.
+Do not make legal, medical, or financial conclusions. Record the need for specialist review.
 
-### 12. Success signals
+## Conditional branches
 
-Determine what observable behavior or outcome would show the first version is useful. Examples include completing the main journey, returning to use it, reducing manual steps, or producing an acceptable result.
+Use only the branch that matches the idea.
 
-Do not invent target numbers. Record qualitative signals when no baseline or target exists.
+### Marketplace
 
-## Adaptive branches
+Clarify both sides, discovery or matching, the transaction, trust, disputes, cancellation, and what happens when one side does not respond.
 
-Use a branch only when the product matches it.
+### Internal tool or automation
 
-### Marketplace or two-sided product
-
-Clarify supply and demand roles, discovery or matching, transaction flow, trust, disputes, cancellations, and what happens if one side does not respond.
-
-### Internal tool
-
-Clarify the current workflow, handoffs, source of truth, approvals, bottlenecks, exception handling, and who owns the result.
+Clarify the current workflow, source of truth, handoffs, approvals, exceptions, trigger, output, side effects, failure handling, and human override.
 
 ### AI-assisted product
 
-Clarify input, context source, expected output, acceptable error, prohibited output, human review, feedback/correction, and fallback when the model is uncertain. Separate an essential AI capability from AI added only as a novelty.
+Clarify input, context source, expected output, acceptable error, prohibited output, human review, correction, and fallback. Check whether AI is necessary to the outcome or merely a proposed implementation detail.
 
-### Social or user-generated content
+### User-generated or social content
 
-Clarify who creates and sees content, visibility rules, identity, interaction, reporting, moderation, blocking, and harmful-content risks.
+Clarify identity, visibility, interaction, reporting, moderation, blocking, and harmful-content risk.
 
-### Automation
+### Payments, bookings, or logistics
 
-Clarify trigger, input, rules or decisions, output, side effects, frequency, failure handling, retries, notification, and human override.
+Clarify payer or participant, timing, confirmation, capacity or availability, cancellation, refunds when relevant, failure states, and who updates status.
 
-### Payments or subscriptions
+### High-stakes use
 
-Clarify payer, value purchased, timing, recurring versus one-time payment, trial or free tier if known, access after payment, cancellation, refund expectations, and failure states.
+Clarify the harm from a wrong result, who verifies it, audit needs, consent, access, retention, deletion, and escalation. Preserve uncertainty and recommend expert review.
 
-### Booking, logistics, or location
+## Check each question
 
-Clarify availability, time zones, capacity, confirmation, rescheduling, cancellation, no-shows, location accuracy, and which party updates status.
+Before asking, confirm that the answer can change the concept, main flow, or first-version scope. Do not ask for information the user already supplied, push a feature, or require outside research.
 
-### Sensitive or high-stakes use
-
-Clarify harm from an incorrect result, who verifies it, audit needs, consent, access, retention, deletion, and escalation. Preserve uncertainty and recommend expert review rather than making legal, medical, or financial claims.
-
-## Question quality checks
-
-Before sending a question, verify:
-
-- The answer could change the concept, main flow, or first-version scope.
-- The user has not already answered it implicitly or explicitly.
-- It asks one understandable thing.
-- It avoids professional jargon or explains it immediately.
-- It does not push the user toward a feature or business model.
-- It can be answered from the user's knowledge without outside research.
-
-Prefer “What happens when…?” and “Walk me through…” over “Do you need feature X?”
+Prefer "What happens when...?" and "Walk me through..." to "Do you need feature X?"

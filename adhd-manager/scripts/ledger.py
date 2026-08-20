@@ -359,7 +359,7 @@ def render_status(project: str) -> str:
             lines.append(
                 f"- `{task.get('id', '?')}` r{task.get('revision', '?')} "
                 f"[{task.get('status', '?')}/{mode}] {task.get('title', '')} "
-                f"— {model}/{effort}"
+                f": {model}/{effort}"
             )
         lines.append("")
     active_assumptions = [

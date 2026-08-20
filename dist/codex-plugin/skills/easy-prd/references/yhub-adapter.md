@@ -16,9 +16,9 @@ Do not silently replace a globally installed skill during PRD creation. A curren
 
 Classify source freshness:
 
-- `live` — manifest and current supported skill were read successfully;
-- `cached` — a supported local copy was used but live freshness was not established;
-- `unverified` — only stale or incomplete information was available.
+- `live`: the manifest and current supported skill were read successfully;
+- `cached`: a supported local copy was used but live freshness was not established;
+- `unverified`: only stale or incomplete information was available.
 
 If the installed skill is below the manifest's minimum supported version, do not use it as authoritative. If the manifest is unavailable, do not assume a feature absent from the local skill is supported.
 
@@ -74,11 +74,27 @@ platform:
 
 Use exactly these evidence states:
 
-- `supported` — a current source confirms the capability;
-- `unsupported` — a current source explicitly rules it out;
-- `unknown` — information is absent, stale, ambiguous, or inaccessible.
+- `supported`: a current source confirms the capability;
+- `unsupported`: a current source explicitly rules it out;
+- `unknown`: information is absent, stale, ambiguous, or inaccessible.
 
 Absence of documentation is not evidence of lack of support.
+
+## Separate capability evidence from contract evidence
+
+A supported Y-Hub capability proves that a need can be covered. It does not prove the exact runtime shape an implementation will receive.
+
+For each material SDK, authentication, managed-database, or deployment boundary, identify the smallest contract probe needed before building dependent behavior. Verify only the fields the project uses, including:
+
+- current method and argument names;
+- identifier types and ownership fields;
+- success wrappers, collection shapes, and pagination;
+- empty, unauthorized, validation, and server-error behavior;
+- deployment output or status used by release verification.
+
+Use current official examples as a starting point, then require a live read-only call, a captured real response, or an existing verified test before treating the response shape as confirmed. Base fixtures and mocks on that evidence. Never invent a convenient response shape from the capability description.
+
+Easy PRD must not mutate live infrastructure to perform the probe. Put the probe in the earliest slice that depends on the contract. For a lean or production project, include a real main-journey smoke test against the deployed application before completion.
 
 ## Map project needs
 
@@ -158,6 +174,7 @@ Y-Hub.
 ### Recheck before
 
 - The first slice using each material platform capability.
+- Creating fixtures or adapters that depend on an external response shape.
 - The first production deployment.
 - Any change to data, auth, server logic, secrets, SDK use, or deployment shape.
 ```
@@ -175,7 +192,7 @@ Project documentation records the Y-Hub capabilities this project depends on; it
 
 Do not refresh Y-Hub context for code questions, copy or style edits, local UI changes, or refactors and bug fixes that do not change platform dependencies.
 
-Refresh current Y-Hub context before assessing a new feature's feasibility; changing storage, authentication, permissions, server-side logic, secrets, SDK usage, integrations, or deployment; implementing the first slice that depends on a platform capability; and performing the first production deployment.
+Refresh current Y-Hub context before assessing a new feature's feasibility; changing storage, authentication, permissions, server-side logic, secrets, SDK usage, integrations, or deployment; implementing the first slice that depends on a platform capability; creating fixtures or adapters for an external response shape; and performing the first production deployment.
 
 To refresh, read the live agent manifest, obtain a current supported `yhub-deploy-site` skill when necessary, inspect only relevant sections, compare them with the project's platform contract, and update documentation only when an actual dependency or constraint changed. Do not change architecture merely because an optional new capability appeared.
 ```

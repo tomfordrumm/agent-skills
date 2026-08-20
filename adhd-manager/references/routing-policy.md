@@ -18,8 +18,8 @@ Choose exactly one primary routing decision:
 
 | Decision | Use when | Required action |
 |---|---|---|
-| `STEER` | New input changes an active task | Increment revision, update canonical task, send delta and refreshed requirements to its worker |
-| `SPAWN` | Work is ready, independent, non-conflicting, and a slot exists | Assign scope, prepare worktree if writing code, dispatch canonical work order |
+| `STEER` | New input changes an active task | Increment revision, update the task, send the delta and current requirements to its worker |
+| `SPAWN` | Work is ready, independent, non-conflicting, and a slot exists | Assign scope, prepare a worktree if writing code, and dispatch the current work order |
 | `QUEUE` | Work is accepted but waiting for capacity, evidence, dependency, or ownership | Record the reason and launch condition |
 | `SUPERSEDE` | New input cancels or replaces accepted work | Preserve history, mark the old task or requirement superseded, stop invalid work if necessary |
 | `PARK` | The idea is valid backlog but intentionally outside current focus | Record it with enough context to recover later; do not spend a worker slot |
@@ -70,7 +70,7 @@ When scope is uncertain, use a read-only discovery worker before granting write 
 Batch intents when they share all or most of:
 
 - one product outcome;
-- one semantic scope owner;
+- one owner for the affected behavior or contract;
 - compatible implementation order;
 - the same inputs and assumptions;
 - one verification strategy.

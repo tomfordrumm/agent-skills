@@ -1,6 +1,6 @@
 # State model
 
-Use this reference as the canonical durable state contract for ADHD Manager.
+Use this reference as the durable state contract for ADHD Manager.
 
 ## Contents
 
@@ -25,11 +25,11 @@ Store manager-owned state under `.codex/adhd-manager/`:
 └── status.md
 ```
 
-- `tasks.json`: canonical tasks, graph, ownership, worker, and integration state.
-- `assumptions.json`: material ambiguity and its resolution history.
+- `tasks.json`: source of truth for tasks, dependencies, ownership, workers, and integration.
+- `assumptions.json`: important assumptions and their resolution history.
 - `inbox.jsonl`: append-only normalized user-message events. Store concise intent summaries, not secrets or unnecessary raw chat.
 - `decisions.md`: durable explanations for routing, architecture constraints, cancellations, and significant priority changes.
-- `status.md`: generated human-readable snapshot; never treat it as canonical.
+- `status.md`: generated human-readable snapshot, not a source of truth.
 
 Do not place product specifications or worker scratch notes here when they belong in normal project documentation.
 

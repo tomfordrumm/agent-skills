@@ -1,6 +1,6 @@
 # Worker contracts
 
-Use canonical work orders so workers receive current intent instead of the user's raw message stream.
+Use current work orders so workers receive accepted intent instead of the user's raw message stream.
 
 ## Contents
 
@@ -118,7 +118,7 @@ Give a code-writing worker a task branch and absolute worktree path. Instruct it
 
 ## Steering
 
-Update the ledger before steering. Send both the delta and the refreshed canonical state:
+Update the ledger before steering. Send both the delta and the refreshed task state:
 
 ```text
 TASK-001 is now revision 3; revision 2 is stale.
@@ -127,7 +127,7 @@ Delta:
 - Add permission reduction for existing keys.
 - Existing keys still cannot gain permissions.
 
-Canonical requirements:
+Current requirements:
 - list keys;
 - revoke a key;
 - reduce permissions.

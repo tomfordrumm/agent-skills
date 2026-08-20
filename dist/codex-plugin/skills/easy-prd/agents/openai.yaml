@@ -1,4 +1,4 @@
 interface:
   display_name: "Easy PRD"
-  short_description: "Готовит адаптивный PRD и план реализации"
+  short_description: "Масштабирует PRD под prototype, lean или production"
   default_prompt: "Используй $easy-prd, чтобы превратить Product Brief в готовый к реализации PRD и план вертикальных слайсов."

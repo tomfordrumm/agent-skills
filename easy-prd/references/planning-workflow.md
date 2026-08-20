@@ -1,41 +1,26 @@
 # Planning workflow
 
-Use this workflow for every Easy PRD run. Keep an internal model until the `WRITE` stage; do not let early file templates dictate analysis.
+Use this workflow for every Easy PRD run. Keep a private working model until the product, scope, architecture, and slices agree. Templates must follow the analysis, not shape it.
 
-## 1. DISCOVER — locate evidence
+## 1. Find the evidence
 
-Find the product input in this order:
+Look for product intent in this order:
 
-1. A path explicitly named by the user.
-2. `PROJECT_BRIEF.md` at the project root.
-3. `docs/BRIEF.md`, then `BRIEF.md`.
-4. Another obvious discovery artifact or PRD already in the repository.
-5. A sufficiently complete brief supplied in the current conversation.
+1. the path named by the user;
+2. `PROJECT_BRIEF.md` at the project root;
+3. `docs/BRIEF.md` or `BRIEF.md`;
+4. another clear discovery artifact or existing PRD;
+5. a sufficiently complete brief in the conversation.
 
-If several sources conflict and authority is unclear, ask which one controls. Preserve the original brief as intent evidence even when working documents later refine it.
+If sources conflict and authority is unclear, ask which one controls. Keep the original brief as evidence even when working documents later refine it.
 
-Inspect the repository before asking questions. At minimum, inspect:
+Inspect the repository before asking questions. Read the instructions, manifests, entry points, tests, data contracts, deployment files, and existing project documents that could affect the plan. Do not treat found code as verified behavior.
 
-- `AGENTS.md` and other repository instructions;
-- project manifests and lockfiles;
-- source layout and primary entry points;
-- tests and test configuration;
-- data schemas, migrations, API contracts, and auth code when present;
-- deployment and environment examples;
-- existing product, technical, state, plan, decision, and slice documents.
+Classify the starting point as new, scaffold-only, implemented but poorly documented, or implemented with maintained documents. The classification affects how much evidence must be reconciled, not which template to use.
 
-Classify the starting state:
+## 2. Build a working model
 
-- `new` — no implementation exists;
-- `existing-empty` — scaffolding exists without meaningful product behavior;
-- `existing-implemented` — behavior exists but planning documents are absent or incomplete;
-- `existing-documented` — implementation and a working documentation system exist.
-
-Do not treat found code as verified behavior.
-
-## 2. MODEL — normalize facts before decisions
-
-Build a private working model with:
+Record only facts needed to decide scope and implementation:
 
 ```yaml
 product:
@@ -43,13 +28,12 @@ product:
   users: []
   primary_outcome:
   primary_journey: []
-  roles: []
   must_have: []
   later: []
   out_of_scope: []
-  success_signals: []
 
 behavior:
+  roles: []
   business_rules: []
   important_states: []
   failure_cases: []
@@ -67,6 +51,14 @@ constraints:
   existing_stack:
   operational: []
 
+delivery:
+  intended_use:
+  profile: prototype | lean | production
+  timebox:
+  timebox_covers:
+  non_negotiable_quality: []
+  accepted_compromises: []
+
 evidence:
   confirmed: []
   assumptions: []
@@ -75,56 +67,44 @@ evidence:
   verified_implementation: []
 ```
 
-Record provenance for material claims: user-confirmed, brief, repository evidence, agent proposal, or unknown.
+Mark the source of every material claim as user, brief, repository evidence, agent proposal, or unknown.
 
-## 3. CLASSIFY — estimate documentation needs
+## 3. Select the delivery profile and timebox
 
-Classify complexity provisionally. This classification guides interview depth and later packaging; it does not force a file structure.
+Read `delivery-profiles.md`. Choose `prototype`, `lean`, or `production` from the intended use and risk, not from the presence of authentication, a database, an SDK, or deployment.
 
-Signals that increase complexity include:
+Treat a timebox as a separate constraint. State what it covers, such as idea through publication or implementation only. If the intended result cannot fit safely, narrow the first-version journey, split delivery, or ask the user to resolve the conflict. Do not silently downgrade a real integration, privacy boundary, or other non-negotiable quality.
 
-- multiple roles or permission levels;
-- several independent user journeys;
-- authentication or cross-device identity;
-- sensitive or regulated data;
-- payments, billing, or irreversible operations;
-- external integrations, webhooks, or private secrets;
-- non-trivial data relationships or lifecycle rules;
-- offline, realtime, background, file-processing, or migration behavior;
-- more than roughly eight implementation slices;
-- an existing system whose behavior must be reconciled.
+Report the proposed profile and its practical consequences when the brief does not make them obvious. Ask only when another profile would materially change scope, fidelity, or release checks.
 
-A tiny app may still need a separate security or data section when risk justifies it. A larger but simple content site may remain Compact.
+## 4. Decide how much documentation is warranted
 
-## 4. CLARIFY — ask only material questions
+Complexity grows when the product has several roles or journeys, sensitive data, payments, irreversible actions, external integrations, offline or background behavior, non-trivial data lifecycles, or existing behavior that must remain compatible.
 
-Ask only when the answer could change at least one of:
+Use this judgment to control question depth and documentation size. It does not force a package. A small product can need a separate security section, while a larger content site may still fit the Compact package. The delivery profile also does not force a package.
 
-- who can use or see something;
-- the primary user journey or promised outcome;
-- must-have versus later scope;
-- data ownership, privacy, retention, or sensitivity;
-- payments or irreversible actions;
-- a required integration or platform;
-- technical feasibility or a major architecture component;
-- whether existing behavior must remain compatible.
+## 5. Resolve material questions
 
-Use plain product language. Do not ask the user to choose implementation details the skill can responsibly decide.
+Ask only when the answer could change:
 
-If the user asks to proceed without questions, use conservative defaults, label every material inference as an assumption, and continue unless doing so would falsely claim safety or feasibility.
+- who can use, own, or see data;
+- the main journey or promised outcome;
+- first-version scope;
+- intended use or a timebox conflict that would change the first version;
+- privacy, retention, payment, or destructive behavior;
+- a required integration or platform capability;
+- a major architecture component;
+- compatibility with existing behavior.
 
-Before design, show a compact synthesis when user confirmation is needed:
+Use product language. Do not ask a non-technical user to choose databases, API styles, state managers, or folder structures.
 
-- first-version outcome;
-- must-have scope;
-- explicit exclusions;
-- roles and visibility;
-- proposed platform and architecture shape;
-- material assumptions or unresolved decisions.
+If the user asks to proceed without questions, choose conservative defaults and label material inferences as assumptions. Stop only when continuing would misrepresent safety or feasibility.
 
-## 5. RESOLVE PLATFORM — establish feasible components
+When confirmation is needed, show a short synthesis of the first-version outcome, must-have scope, exclusions, roles, proposed system shape, and unresolved decisions.
 
-Convert product requirements into technical needs before choosing providers:
+## 6. Match needs to components
+
+Translate confirmed requirements into technical needs before naming providers:
 
 ```yaml
 project_needs:
@@ -134,99 +114,56 @@ project_needs:
     criticality: required
 ```
 
-For Y-Hub, follow `yhub-adapter.md`. For another platform, use its current authoritative documentation and the same status discipline.
+For Y-Hub, follow `yhub-adapter.md`. For another platform, use current authoritative documentation and record any unverified capability.
 
-Choose components, not a monolithic label:
+Capability support is not proof of a runtime response shape. For every material external SDK or API boundary, plan the earliest cheap contract probe that can verify actual method names, identifiers, wrappers, pagination, and error behavior. Base fixtures and mocks on that evidence. A lean or production plan must include a real happy-path smoke test before publication.
 
-```yaml
-architecture:
-  frontend:
-    stack:
-    delivery:
-  server_logic:
-    provider:
-    purposes: []
-  data:
-    provider:
-  authentication:
-    provider:
-  files:
-    provider:
-  integrations: []
-  background_processing:
-    provider:
-  deployment:
-    provider:
-```
+Choose frontend, server logic, data, authentication, files, integrations, background processing, and deployment separately. Select the simplest combination that satisfies every first-version need. A friendly preset name may summarize the result but must not replace the component list.
 
-Select the simplest combination that fully satisfies first-version needs. Keep a friendly preset name only as a summary, never as the source of truth.
+## 7. Set the MVP boundary
 
-## 6. DEFINE MVP — normalize scope
+Place each candidate capability in `must_have`, `later`, or `out_of_scope`.
 
-Place every candidate function in exactly one group:
+A capability belongs in `must_have` only when the main journey cannot produce its result without it, the product would be unsafe without it, or a confirmed business rule requires it. Keep decoration, speculative scale work, optional social mechanics, and analytics without a decision use outside the MVP.
 
-```yaml
-must_have: []
-later: []
-out_of_scope: []
-```
+Write one observable boundary sentence. Example:
 
-Keep a function in `must_have` only when it is necessary to:
+> The first version is useful when a user can save a task, see it after returning, and mark it complete without exposing it to another user.
 
-- complete the primary journey;
-- deliver the promised first-version value;
-- use the product safely;
-- preserve data required by that value;
-- test the stated product hypothesis;
-- satisfy a mandatory business rule.
-
-Challenge decoration, premature automation, settings with only one choice, unmotivated admin tools, speculative scale work, analytics without a decision use, optional social mechanics, and features already deferred by the user.
-
-Write one observable first-version statement, for example:
-
-> The first version is useful when the user can capture a task, see it after returning, and mark it complete without exposing it to another user.
-
-## 7. DESIGN — create coherent contracts
+## 8. Define behavior and contracts
 
 Create stable IDs only for items referenced by slices or tests:
 
-- `FR-###` — functional behavior;
-- `BR-###` — business rule;
-- `NFR-###` — material quality, privacy, compatibility, or operational requirement;
-- `D-###` — significant product or technical decision.
+- `FR-###` for functional behavior;
+- `BR-###` for business rules;
+- `NFR-###` for material quality, privacy, compatibility, or operational requirements;
+- `D-###` for significant decisions.
 
-For each important user action, consider only relevant states:
+For each important action, describe only relevant loading, empty, success, validation, permission, server-error, offline, or conflict states.
 
-- initial, loading, empty, success;
-- validation error and server error;
-- permission denied;
-- offline or conflict states when applicable.
+Describe data twice only when both views are useful. Product documents cover meaning, ownership, visibility, lifecycle, and relationships. Technical documents cover storage, identifiers, validation authority, and failure behavior.
 
-Describe data at two levels:
+Record significant decisions with their source, context, rationale, consequences, and status. Never present an agent inference as a user decision.
 
-- product: entities, ownership, visibility, lifecycle, relationships;
-- technical: storage, identifiers, critical fields, validation authority, failure behavior.
+## 9. Create vertical slices
 
-Do not prematurely design a large database schema. Document security boundaries, secret placement, destructive operations, and privacy rules when relevant.
-
-Record significant decisions with context, decision, rationale, consequences, author/source, and status. Never label an agent inference as a user decision.
-
-## 8. SLICE — create an executable roadmap
-
-Build a coverage map before writing slice prose:
+Map every must-have requirement to a slice before writing slice prose:
 
 ```text
 FR-001 -> S002
-FR-002 -> S002
 BR-001 -> S002
 NFR-001 -> S001, S002
 ```
 
-Prefer vertical slices ending in an observable result. A slice may cross UI, data, and server layers. Avoid separate “create table,” “build API,” and “build frontend” slices that produce no value on their own.
+Each slice must end in an observable user result or necessary infrastructure result. A slice may cross UI, server, and data layers. Avoid separate table, API, and frontend slices that provide no result alone.
 
-Allow one small foundation slice when it produces a walking skeleton that runs, is testable, and can be deployed. Do not let setup become a multi-session infrastructure phase.
+One small foundation slice is acceptable when it produces a running, testable path. Do not let setup grow into a separate infrastructure project.
 
-Each fully detailed slice must define:
+Scale the slice plan to the delivery profile. Prototype plans usually need one or two slices. Lean plans usually need two to four. Production plans have no fixed count because risk and independent outcomes control the shape.
+
+For lean and production work, make the first slice prove the highest-risk real external contract and the deployment path while delivering the smallest observable value. Do not plan a disposable fixture-only shell unless the interface itself is the prototype hypothesis. Combine setup, data, API, and UI work when separating them would create handoffs without an independently useful result.
+
+A ready slice states:
 
 ```yaml
 id:
@@ -238,108 +175,58 @@ covers: []
 in_scope: []
 out_of_scope: []
 behavior: []
-ui_states: []
-data_changes: []
 acceptance_criteria: []
 verification: []
-definition_of_done: []
-implementation_report:
 ```
 
-Classify verification by execution boundary:
+Keep one cohesive outcome per slice. Split a slice when its criteria describe independent results or cannot fit one focused implementation session.
 
-- use automated checks for anything the implementation agent can run or inspect reliably;
-- reserve human-only checks for behavior that requires human perception, physical hardware, a real external account, OS-level interaction, or another runtime surface the agent cannot observe;
-- write each human-only check as precondition -> action -> expected observable result;
-- do not use manual verification as a substitute for feasible automation.
+Use automated checks for anything the agent can run or inspect. Reserve human checks for perception, physical hardware, a real external account, OS-level behavior, or another runtime the agent cannot observe. State each human check as setup, action, and expected result.
 
-Keep each slice to one cohesive outcome and one focused implementation session. If it has more than roughly seven or eight independent acceptance criteria, consider splitting it.
+Plan verification at meaningful evidence points, not after every document or layer. Use focused checks during implementation and a full build or suite when a complete path or release candidate exists. Repeat a full gate only when a relevant change could invalidate its result. For lean work, default to one final independent review at most; do not create an automatic review-fix-review loop for lower-impact findings.
 
 Use these statuses:
 
-- `planned` — known but not sufficiently detailed or still dependency-bound;
-- `ready` — fully specified and unblocked;
-- `in_progress` — implementation has started;
-- `blocked` — a concrete blocker exists;
-- `needs_verification` — implementation may exist but criteria are not proven;
-- `done` — every criterion and verification step passed.
+- `planned` when details or dependencies remain;
+- `ready` when the slice is specified and unblocked;
+- `in_progress` when implementation has started;
+- `blocked` when a named blocker exists;
+- `needs_verification` when code may exist but criteria are unproven;
+- `done` when every required check passed.
 
-Apply progressive elaboration:
+Detail all slices in a small plan. For a long roadmap, fully detail the first milestone and nearest ready work. Expand a planned slice before implementation.
 
-- Up to 8 slices: detail all slices.
-- 9–15 slices: fully detail the first milestone and nearest ready slices; keep later slices concise.
-- More than 15 slices: split into milestones, fully detail only the first, and leave later work at roadmap level.
+## 10. Package the documents
 
-Before implementation, a concise `planned` slice must be expanded and promoted to `ready`.
+Read `documentation-model.md` and choose Compact, Standard, or Extended from actual complexity and existing conventions.
 
-## 9. PACKAGE — choose files after content
+Preserve the source brief. If it exists only in the conversation, save a faithful snapshot as `docs/BRIEF.md` when provenance will matter.
 
-Read `documentation-model.md` and select Compact, Standard, or Extended. Use actual project complexity and existing conventions, not arbitrary scoring.
+## 11. Validate before writing
 
-Preserve an existing source brief. If the only brief exists in the conversation, save a faithful snapshot as `docs/BRIEF.md` when useful for provenance.
+Check these invariants:
 
-## 10. VALIDATE — audit the complete model
+- every MVP capability is confirmed or visibly assumed;
+- the delivery profile, intended use, timebox boundary, and accepted compromises agree;
+- the primary journey reaches the promised outcome;
+- roles, ownership, permissions, and success signals agree;
+- every required need has a supported component;
+- material external contracts have an early evidence step and a real smoke test when required by the profile;
+- private secrets do not enter browser code;
+- every must-have requirement maps to a slice;
+- slice dependencies are acyclic and at least one slice is ready;
+- slice count and verification cadence are proportionate to the delivery profile;
+- human checks cover only behavior the agent cannot verify;
+- links and paths resolve;
+- each fact and status has one owner;
+- existing human instructions remain intact.
 
-Before writing, check:
+Fix failures before writing or claiming completion.
 
-### Product
+## 12. Write and report
 
-- Every MVP feature is confirmed or visibly assumed.
-- No invented features or targets appear.
-- `must_have`, `later`, and `out_of_scope` do not conflict.
-- The primary journey reaches the promised outcome.
-- Roles, ownership, permissions, and success signals agree.
+Re-read every existing destination, preserve unrelated content, then create or update the selected documents. Replace only the marked Easy PRD block in `AGENTS.md`. Re-read the result, inspect the diff, and validate against actual paths.
 
-### Technical
+Do not silently delete old documentation. When consolidation is needed, preserve useful facts, update inbound links, and report what moved.
 
-- Every project need is covered by an architecture component.
-- No required component depends on a capability marked `unknown`.
-- Private secrets never enter browser code.
-- Storage matches ownership, visibility, sensitivity, and lifecycle.
-- Infrastructure is proportional to the first version.
-
-### Slices
-
-- Every must-have requirement maps to a slice.
-- Every slice has a real user or necessary infrastructure outcome.
-- Dependencies are acyclic.
-- At least one slice is `ready`.
-- The first ready slice needs no unresolved product decision.
-- Criteria are observable and deferred features have not leaked into MVP.
-- Human-only verification is limited to checks the implementation agent cannot perform and states a precondition, action, and expected result.
-
-### Documents
-
-- Links, anchors, and paths resolve.
-- No empty or template-only documents exist.
-- Each fact has one source of truth.
-- Statuses agree everywhere they are summarized.
-- `AGENTS.md` names only real files and preserves human instructions.
-
-Fix validation failures before writing or reporting completion.
-
-## 11. WRITE — save safely
-
-1. List the intended created and changed files internally.
-2. Re-read every destination that already exists.
-3. Preserve unrelated content and repository-specific conventions.
-4. Create or update the documentation files.
-5. Create or replace only the marked Easy PRD block in `AGENTS.md`.
-6. Re-read all written files and repeat validation against actual paths.
-7. Inspect the diff when Git is available.
-
-Do not delete obsolete documentation silently. If consolidation is necessary, retain relevant facts, update inbound links, and report the migration.
-
-## 12. REPORT — hand off the first action
-
-Report:
-
-- chosen package and why;
-- created and changed files;
-- one-sentence MVP boundary;
-- first `ready` slice;
-- assumptions and open blockers;
-- platform source and freshness;
-- any existing behavior marked `needs_verification`.
-
-Do not begin implementation unless the user separately requests it.
+Report the delivery profile and timebox, chosen document set, changed files, MVP boundary, first ready slice, assumptions, blockers, platform source, and existing behavior that still needs verification. Do not begin implementation unless the user separately requests it.

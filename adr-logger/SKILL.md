@@ -3,11 +3,9 @@ name: adr-logger
 description: Enforce Architectural Decision Records (ADR) logging for every task. Use when a user asks to create, update, or enforce ADRs, or when a workflow requires logging decisions in an ADR directory with daily files named adr_yyyy_mm_dd.md.
 ---
 
-# Adr Logger
+# ADR logger
 
-## Overview
-
-Ensure an ADR directory exists and log a decision entry for every task in a daily ADR file named `adr_yyyy_mm_dd.md`.
+Log one decision entry for each task in the daily file `ADR/adr_yyyy_mm_dd.md`.
 
 ## Workflow
 
@@ -17,9 +15,9 @@ Ensure an ADR directory exists and log a decision entry for every task in a dail
 4. If the file exists, append a new entry; if not, create it with a header and the first entry.
 5. Each task must produce exactly one entry.
 
-## Entry Format
+## Entry format
 
-Use this structure for each entry (append under the file header if the file already exists):
+Append this structure under the file header:
 
 ```
 ## HH:MM - <task title>
@@ -34,7 +32,4 @@ Use this structure for each entry (append under the file header if the file alre
 - <impact, tradeoffs, or follow-up>
 ```
 
-Guidelines:
-- Use local time for `HH:MM`.
-- Keep entries concise and task-specific.
-- If a task has no architectural impact, log a brief "No architectural impact" in Consequences.
+Use local time for `HH:MM`. Keep the entry short and specific to the task. If the task has no architectural impact, write `No architectural impact` under Consequences.

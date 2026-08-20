@@ -1,10 +1,12 @@
-# Adaptive documentation model
+# Documentation model
 
-Stable information domains do not require a stable number of files. Every project needs clear product intent, implementation approach, work sequence, current state, and decisions; package those domains according to complexity.
+Every project needs clear product intent, a technical approach, ordered work, current state, and recorded decisions. The project does not need a separate file for each category.
 
-## Compact package
+Choose the document package from information complexity and maintenance needs, not from the delivery profile. Record the selected `prototype`, `lean`, or `production` profile and any timebox inside the chosen package. Authentication, a database, an integration, or deployment does not by itself require Standard documentation.
 
-Use for a small product with one main role, one primary journey, few entities, little security or integration risk, and roughly two to five slices.
+## Compact
+
+Use Compact for a small product with one main journey, few roles, limited independent decisions, and roughly one to five slices. A known authentication or integration contract can remain Compact when it does not need a separate owner or lifecycle.
 
 ```text
 AGENTS.md
@@ -13,30 +15,15 @@ docs/
   PLAN.md
 ```
 
-`PROJECT.md` contains:
+`PROJECT.md` owns the product summary, delivery profile and timebox, scope, journey, requirements, business rules, data ownership, technical approach, constraints, assumptions, and decisions.
 
-- product summary, users, problem, and first-version outcome;
-- must-have, later, and out-of-scope lists;
-- main journey and important states;
-- functional requirements and business rules;
-- data ownership and visibility;
-- technical approach and platform contract;
-- constraints, assumptions, open questions, and decisions.
+`PLAN.md` owns milestones, slices, dependencies, status, acceptance criteria, verification cadence, release checks, blockers, and implementation reports.
 
-`PLAN.md` is the sole source of truth for operational state and contains:
+Do not add empty status, decision, or slice files to imitate a larger project.
 
-- milestones and ordered slices;
-- statuses and dependencies;
-- active or next ready slice;
-- detailed acceptance criteria and verification for each near-term slice;
-- blockers and last verified state;
-- implementation reports.
+## Standard
 
-Do not create empty `STATE.md`, `DECISIONS.md`, or `slices/` merely to resemble a larger project.
-
-## Standard package
-
-Use for most full web applications: several journeys, authentication, multiple roles, meaningful data, integrations, or approximately six to fifteen slices.
+Use Standard when the product has several journeys or roles, independently changing technical contracts, a meaningful data lifecycle, enough decisions to need their own log, or roughly six to fifteen slices. Do not choose it for authentication or one integration alone.
 
 ```text
 AGENTS.md
@@ -51,72 +38,48 @@ docs/
     S002-first-user-value.md
 ```
 
-Retain an existing brief at its original path. Add `docs/BRIEF.md` only when the source brief existed solely in conversation or consolidation is explicitly useful.
+Keep an existing brief at its original path. Add `docs/BRIEF.md` only when the source existed solely in chat or a preserved copy has clear value.
 
 ### PRODUCT.md
 
-Make this the product behavior contract:
+This file owns product behavior:
 
-- goals and non-goals;
-- users and roles;
-- primary and secondary journeys;
-- MVP boundary;
-- functional requirements (`FR-###`);
-- business rules (`BR-###`);
-- material non-functional requirements (`NFR-###`);
+- goals, exclusions, users, roles, and journeys;
+- intended use, delivery profile, timebox, and accepted compromises;
+- the MVP boundary;
+- functional requirements and business rules;
+- material quality and privacy requirements;
 - permissions, interface states, errors, and edge cases;
-- observable product success signals;
-- assumptions and open product questions.
+- success signals, assumptions, and open product questions.
 
 ### TECHNICAL.md
 
-Make this the implementation contract:
+This file owns implementation constraints:
 
-- application type and selected stack;
-- architecture components and responsibilities;
-- source layout at a useful, non-prescriptive level;
+- selected stack and component responsibilities;
+- useful source-layout guidance without prescribing every file;
 - data storage, ownership enforcement, and lifecycle;
 - authentication and authorization;
-- integrations, secrets, configuration, and failure handling;
-- security constraints;
-- test strategy;
-- deployment approach and platform contract;
-- technical assumptions and recheck points.
+- integrations, configuration, secrets, and failure handling;
+- test and deployment strategy;
+- evidence and recheck points for material external contracts;
+- platform contract and recheck points.
 
-Do not prescribe low-level structure that the implementation agent should choose from evidence.
+Leave local class boundaries and helper structure to the implementation agent unless a confirmed contract depends on them.
 
-### PLAN.md
+### PLAN.md and STATE.md
 
-Contain milestones, slice ordering, dependency summaries, and requirements coverage. Do not duplicate operational status details beyond a concise derived summary when `STATE.md` exists.
+`PLAN.md` owns milestones, slice order, dependency summaries, requirement coverage, and the profile-appropriate verification and release gates.
 
-### STATE.md
-
-Make this the only operational status source of truth:
-
-- current milestone;
-- active slice, or first ready slice when work has not begun;
-- one status table for all slices;
-- concrete blockers;
-- last verified build, tests, and behavior;
-- exact next action.
+`STATE.md` is the only operational status source. It names the current milestone, active or first ready slice, slice statuses, blockers, last verified behavior, and exact next action.
 
 ### DECISIONS.md
 
-Keep a lightweight decision log. For each `D-###`, record:
-
-- status and date;
-- source: user, existing system, or agent proposal;
-- context;
-- decision;
-- rationale;
-- consequences;
-- superseded decision when applicable.
-
-Distinguish accepted decisions, proposals, assumptions, and open questions.
+For each significant decision, record its ID, status, date, source, context, choice, rationale, consequences, and any decision it replaces. Keep decisions, proposals, assumptions, and open questions distinct.
 
 ### Slice files
 
-Use frontmatter for stable machine-scannable metadata:
+Use frontmatter for fields that agents need to scan:
 
 ```yaml
 ---
@@ -127,153 +90,84 @@ depends_on:
   - S001
 covers:
   - FR-001
-  - FR-002
   - BR-001
 ---
 ```
 
-Then include:
+The body should contain only the sections needed to implement and verify the slice:
 
 ```markdown
-# S002 — Create and view a task
+# S002: Create and view a task
 
 ## User outcome
-
-## In scope
-
-## Out of scope
-
-## Preconditions
-
+## Scope
 ## Expected behavior
-
 ## Interface states
-
 ## Data and contracts
-
 ## Acceptance criteria
-
-- [ ] ...
-
 ## Verification
-
-### Automated
-
-- [ ] ...
-
-### Human-only
-
-- [ ] Given ..., when the user ..., then the observable result is ...
-
-## Definition of Done
-
-- [ ] All acceptance criteria pass.
-- [ ] Required automated and human-only checks pass, or an explicit verification deviation is recorded.
-- [ ] The application builds without a new regression.
-- [ ] Operational state is updated.
-- [ ] New significant decisions are recorded.
-- [ ] The implementation report below is complete.
-
 ## Implementation report
-
-### Implemented
-
-### Files changed
-
-### Verification performed
-
-### Deviations from plan
-
-### Remaining issues
 ```
 
-Acceptance criteria are binding. Implementation suggestions may change if the final behavior and contracts remain correct and any significant decision is recorded.
+Acceptance criteria are binding. Implementation suggestions may change when behavior and contracts remain correct and the change is recorded when significant.
 
-Omit `Human-only` when every required check is executable by the implementation agent. Never assign the user an automatable check merely to increase confidence.
+Omit human verification when the agent can run every required check. Never assign an automatable check to the user.
 
-## Extended package
+## Extended
 
-Start with Standard. Add only independently useful documents such as:
+Start with Standard. Add a domain file such as `DATA.md`, `SECURITY.md`, or `INTEGRATIONS.md` only when the domain has its own owner or lifecycle, affects several slices, changes independently, or carries material security, privacy, payment, migration, or operational risk.
 
-```text
-docs/
-  DATA.md
-  UI.md
-  API.md
-  INTEGRATIONS.md
-  SECURITY.md
-  DEPLOYMENT.md
-  TESTING.md
-  PLATFORM.md
-```
+Move the detail rather than duplicating it. Leave a short summary and link in the original file.
 
-Extract a domain into its own document when at least one is true:
+## Managed AGENTS.md block
 
-- three or more slices reference it;
-- it contains five or more substantial requirements or contracts;
-- it has an independent lifecycle or owner;
-- it carries material security, privacy, money, migration, or operational risk;
-- it changes frequently without the rest of the technical contract;
-- leaving it embedded makes information meaningfully hard to find.
-
-Do not duplicate the extracted content. Replace the old section with a concise summary and link.
-
-## AGENTS.md managed block
-
-Create or update exactly one marked block, preserving all content outside it:
+Create or update one marked block and preserve everything outside it:
 
 ```markdown
 <!-- BEGIN EASY PRD WORKFLOW -->
-## Project documentation workflow
+## Project documentation
 
 ### Document map
 
-- `actual/path.md` — its real source-of-truth purpose.
+- `actual/path.md`: what this file owns.
 
-### Choose context by task
+### Delivery approach
 
-Do not load all project documentation automatically.
+- Profile: `prototype | lean | production`.
+- Timebox: [duration and what it covers, or `not specified`].
+- Preserve the documented quality floor and accepted compromises when reducing scope.
+- For implementation of an existing slice, follow the current state and slice. Do not invoke Easy PRD again unless product scope, a material contract, architecture, or the plan changes.
+- Run focused checks while working and full gates only at the milestones defined in the plan or after a change that invalidates prior evidence.
 
-- **Question about code:** read relevant code and tests. Read product documentation only when expected behavior is in question. Current project state is optional.
-- **Local visual, copy, or technical edit:** read affected code, styles, and tests. Documentation is optional when product behavior and contracts do not change.
-- **Continue planned implementation:** read the current state, selected slice, and only the documents and requirements linked by that slice.
-- **New feature:** read product scope, plan, relevant technical decisions, and related slices. Create or update a slice before implementation.
-- **Data, architecture, integration, auth, or deployment change:** read the relevant technical contract, decisions, and affected slices. Refresh platform context when required.
-- **Unplanned bug fix:** work outside the active slice when appropriate. Update documentation only if behavior, a contract, data shape, architecture, or plan changes.
+### Load only relevant context
 
-### Completing a slice
+- For a code question or local fix, read the affected code and tests. Read product documents only when expected behavior is unclear.
+- For planned implementation, read current state, the selected slice, and documents linked from that slice.
+- For a new feature, read product scope, relevant decisions, and related slices. Create or update a slice before implementation.
+- For data, architecture, integration, authentication, or deployment changes, read the matching technical contract and decisions.
+- For an unplanned bug, update documents only when behavior, a contract, architecture, data shape, or the plan changes.
 
-Do not mark a slice `done` until every acceptance criterion and verification step passes, the implementation report is filled, operational state is updated, and significant new decisions are recorded.
+### Complete a slice
 
-### Human acceptance handoff
+Do not mark a slice `done` until its acceptance criteria and verification pass, its implementation report is filled, state is updated, and significant new decisions are recorded.
 
-After automated verification, separate confirmed results from checks that only the user can perform. Do not ask the user to repeat checks the agent can run or inspect reliably.
+### Human verification
 
-When required human-only checks remain:
+Keep the slice at `needs_verification` while required human checks remain. Give the user only checks the agent cannot perform, with setup, action, and expected result. Record the result as confirmed, failed, skipped, unavailable, or accepted as a deviation.
 
-- keep the slice `needs_verification` and state that completion is waiting on user evidence;
-- give a short numbered checklist grouped by coherent scenario, with setup, action, and expected observable result;
-- ask only for the minimum useful response, such as confirmation, a screenshot, or the exact warning text;
-- record each result accurately as confirmed, failed, skipped, unavailable, or explicitly accepted as a deviation;
-- if a check fails, diagnose and fix it before presenting a focused retest plus only the adjacent regression checks;
-- do not mark an unperformed check as passed or describe a deviation as an actual run.
+### Grow documents carefully
 
-Honor any project or user rule that makes acceptance a commit gate. Otherwise, never report the slice complete or promote it to `done` while required human-only checks remain.
+Add a section to an existing file first. Extract a separate domain only when it has a reason to change independently. Update the document map after moving content.
 
-### Growing documentation
-
-Add a section to an existing document first. Extract it only when it becomes an independent domain. Keep one source of truth and update the document map and links after extraction.
-
-When the project depends on Y-Hub, insert the refresh subsection defined in `yhub-adapter.md`. Omit it otherwise.
 <!-- END EASY PRD WORKFLOW -->
 ```
 
-Adapt the example to real paths and project-specific rules. Do not mention nonexistent documents.
+Adapt paths and instructions to the real project. Do not mention files that do not exist.
 
-For a Compact package, route planned implementation to the current/next slice in `docs/PLAN.md`. For Standard or Extended, route it through `docs/STATE.md` and the selected file in `docs/slices/`.
+When Y-Hub is part of the project, add the refresh subsection from `yhub-adapter.md`. Omit it otherwise.
 
-## Status consistency
+## Status ownership
 
-In Compact, `PLAN.md` owns statuses. In Standard and Extended, `STATE.md` owns statuses; `PLAN.md` and slice frontmatter may display synchronized summaries but must point readers to `STATE.md` when a conflict appears.
+In Compact, `PLAN.md` owns status. In Standard and Extended, `STATE.md` owns it. Other files may show summaries but must link to the owner when a conflict appears.
 
-Never use `done` as a planning default. New-project slices begin as `ready` only when fully specified and unblocked; later concise slices begin as `planned`. Existing behavior begins as `needs_verification` unless its criteria were actually checked.
+New slices start as `ready` only when specified and unblocked. Later slices start as `planned`. Existing behavior starts as `needs_verification` until its criteria are checked.
