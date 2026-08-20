@@ -80,7 +80,7 @@ Implement TASK-019 revision 2 in the assigned worktree.
 
 Runtime:
 - model: gpt-5.6-terra
-- reasoning effort: high
+- reasoning effort: medium
 
 Objective:
 Fix the mobile placement of the registration submit button.

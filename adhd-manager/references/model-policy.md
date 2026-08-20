@@ -1,61 +1,113 @@
 # Model policy
 
-Choose a worker model and reasoning effort for each dispatch. Optimize the managed project for reliable completion, not for using the strongest model everywhere.
+Choose a model profile and reasoning effort for every worker dispatch. Minimize total token use across the managed objective while keeping a realistic chance of finishing each task in one sound attempt. A cheap worker that predictably needs a retry is not a saving.
 
 ## Runtime discovery
 
 Before the first dispatch, inspect the current subagent spawn tool metadata:
 
-1. List the model overrides it actually accepts.
+1. List the model overrides it accepts now.
 2. List the reasoning-effort values accepted for each model.
-3. Treat this runtime list as authoritative for what can be spawned now.
-4. Never attempt a documented model that the current tool does not expose.
-5. Use `inherit` when no override is available or deliberate inheritance is the best choice.
+3. Read any runtime descriptions that identify a model as fast, balanced, or frontier.
+4. Treat this runtime metadata as authoritative for dispatch. Do not attempt a model or effort merely because documentation names it.
+5. Use `inherit` when overrides are unavailable or deliberate inheritance is the best choice.
 
-Model catalogs change. Apply the named defaults below only when those models are available; otherwise use the fallback rules.
+Build a small session-local capability map. Do not persist a catalog that will become stale. The current model families may provide these role hints when the runtime exposes them:
 
-## Balanced default policy
-
-| Worker task | Preferred selection | Escalate when |
+| Profile | Current primary | Compatibility fallback |
 |---|---|---|
-| Narrow read-only discovery | `gpt-5.6-terra` / `medium` | The evidence spans many subsystems or remains contradictory |
-| Ordinary diagnosis | `gpt-5.6-terra` / `high` | The bug is cross-system, intermittent, or survives one sound attempt |
-| Routine implementation | `gpt-5.6-terra` / `high` | It changes architecture, shared contracts, or a broad critical path |
-| Complex refactor or architecture | `gpt-5.6-sol` / `high` | The design remains underdetermined or verification is unusually difficult |
-| Security, authentication, authorization, payments, privacy, or migrations | `gpt-5.6-sol` / `xhigh` | Use `max` only for the hardest unresolved quality-first case |
-| Independent verification | `gpt-5.6-terra` / `high` | The change is high-risk, broad, or earlier evidence conflicts |
-| Multi-batch integration | `gpt-5.6-sol` / `high` | Semantic conflicts or stale revisions require deeper repair reasoning |
-| Difficult repair or merge conflict | `gpt-5.6-sol` / `xhigh` | Use `max` after a well-scoped `xhigh` attempt is insufficient |
+| `fast` | `gpt-5.6-luna` | Another runtime-described fast or economical coding model |
+| `balanced` | `gpt-5.6-terra` | `gpt-5.4`, then another runtime-described everyday coding model |
+| `frontier` | `gpt-5.6-sol` | `gpt-5.5`, then another runtime-described frontier coding model |
 
-Use `medium` as the lowest normal starting point for tool-using project work. Use `low` only for tightly bounded, latency-sensitive mechanical inspection. Reserve `max` for exceptional tasks where quality dominates latency and cost; do not select it merely because a task is important.
+These names are hints, not an availability claim. Classify a newly exposed model from the spawn tool's description. If its role is unclear, do not guess from its name. Use `inherit`, a known available model, or ask only when the choice materially affects the task.
+
+## Budget modes
+
+Select one budget mode for the managed session. On resume, recover the latest recorded mode from `decisions.md`. Use `balanced` when the user has not selected another mode. Do not interrupt the user to confirm the default.
+
+| Mode | Policy |
+|---|---|
+| `balanced` | Use the lowest profile and effort likely to complete the task in one sound attempt. Spend more when a retry would probably cost more than the stronger first attempt. |
+| `cost-sensitive` | Prefer `fast` for reversible, bounded work and `balanced` for broader work. Keep the safety floors below. Queue work or surface the constraint when the user's cap cannot support a responsible attempt. |
+| `quality-first` | Raise effort for ambiguous, broad, or hard-to-verify work and move to `frontier` earlier. Do not spend frontier tokens on mechanical work that a smaller model can verify objectively. |
+
+Record a user-selected non-default mode or a later mode change in `decisions.md`. Apply a mode change to future dispatches. Do not replace a running worker solely to apply the new mode.
+
+## Balanced baseline
+
+Choose the model profile and effort independently:
+
+| Work characteristics | Model profile | Starting effort |
+|---|---|---|
+| File lookup, inventory, formatting, status extraction, or another mechanical read-only task | `fast` | `low` |
+| Bounded discovery, focused test execution, small reversible edit, or evidence collection with clear success criteria | `fast` | `medium` |
+| Routine diagnosis, implementation, or independent verification within one understood area | `balanced` | `medium` |
+| Multi-file work, uncertain diagnosis, shared-contract review, or bounded integration | `balanced` | `high` |
+| Architecture, semantic merge conflicts, cross-system diagnosis, or a broad critical path | `frontier` | `high` |
+| Security, authentication, authorization, payments, privacy, destructive migrations, or credible data-loss risk | `frontier` | `xhigh` |
+
+Raise the baseline only for evidence such as contradictory findings, broad contract impact, weak verification, or a failed sound attempt. Task priority alone does not justify a stronger model.
+
+For `cost-sensitive`, move reversible tasks down by at most one profile or one effort level. Do not move below the high-risk floor. For `quality-first`, move ambiguous or broad tasks up by one effort level or one profile. Keep mechanical tasks on `fast` unless the evidence itself is difficult to interpret.
+
+## Reasoning effort
+
+Use the effort ladder exposed by the runtime. A common order is:
+
+```text
+low < medium < high < xhigh < max < ultra
+```
+
+Not every model exposes every value. Request only a supported value.
+
+- Use `low` for mechanical work with an objective check.
+- Use `medium` as the normal starting point for bounded tool-using work.
+- Use `high` when the task requires exploration across files or contracts.
+- Use `xhigh` for high-risk work or genuinely difficult reasoning.
+- Use `max` only after `xhigh` was insufficient or the hardest quality-first task has a concrete reason for it.
+- Use `ultra` only when the runtime exposes it and the user explicitly prioritizes maximum quality, or when a documented failed attempt shows that the extra spend is warranted.
+
+Record the reason for `max`, `ultra`, or any departure from the selected budget mode in `decisions.md`.
 
 ## Selection procedure
 
 For each ready task:
 
-1. Determine whether the task is read-only, routine code work, complex reasoning, high-risk domain work, independent verification, or integration.
-2. Evaluate scope breadth, contract impact, reversibility, safety risk, uncertainty, and prior failed attempts.
-3. Select the lowest tier and effort that responsibly covers those factors using the balanced table.
-4. Confirm that both values are accepted by the current spawn tool.
-5. Record `worker.model` and `worker.reasoning_effort` before dispatch.
-6. Use `fork_turns: "none"` for a self-contained work order by default. Use a small positive bounded fork only when recent task-local context is required. A full-history fork must inherit the parent model when the runtime disallows overrides.
+1. Identify the task's scope, reversibility, contract impact, safety risk, uncertainty, verification strength, and prior attempts.
+2. Choose the session budget mode's baseline profile and effort.
+3. Estimate retry risk. Prefer the next stronger first attempt when the cheaper choice is likely to fail for a known reason.
+4. Resolve the profile to an available runtime model.
+5. Choose the intended effort, then clamp it to a value that model accepts. Do not exceed the intended effort merely because a higher value exists.
+6. Record the requested `worker.model` and `worker.reasoning_effort` before dispatch.
+7. Use `fork_turns: "none"` with a compact self-contained work order by default. Use a small bounded fork only when recent task-local context would be more compact than restating it. Full-history forks must inherit when the runtime requires it.
 
-Do not change a running worker's model for a minor steering update. If new evidence materially raises complexity or risk, preserve its work, interrupt only when necessary, and dispatch a replacement or repair worker with the stronger selection.
+Do not send repository-wide history, the raw user conversation, or unrelated ledger entries to a worker. Include enough evidence and constraints to avoid rediscovery, but keep the work order local to the accepted task revision.
 
-## Fallbacks
+## Retry and escalation
 
-If the preferred model is unavailable:
+Do not rerun the same work order with the same model and effort unless new evidence explains why the outcome should differ.
 
-- Replace Sol with the strongest available coding/reasoning model.
-- Replace Terra with the available balanced model; if no clear balanced tier exists, inherit the orchestrator model.
-- Choose the nearest supported reasoning effort without exceeding the intended effort unless risk justifies escalation.
-- Record the fallback and reason in `decisions.md`.
-- Tell the user when the fallback materially changes expected quality, latency, cost, or the ability to execute safely.
+- If the model profile fits but the attempt lacked depth, raise effort by one supported level.
+- If the task exceeded the model's role or scope, raise the model profile and keep effort stable when possible.
+- If the work order was vague or stale, repair the order before spending more tokens.
+- After two failed sound attempts, stop automatic escalation. Revise the task, split it, or report the blocker unless the user has explicitly authorized continued quality-first work.
 
-Do not infer that a model is available because it appears in public documentation. Do not silently downgrade security-, payment-, privacy-, authentication-, or migration-sensitive work to a weak or unknown model; queue it or surface the constraint when no responsible fallback exists.
+Preserve useful evidence from every attempt. Do not ask a replacement worker to rediscover facts already established.
+
+## Fallbacks and safety floors
+
+Resolve fallbacks by role, not by model-name ordering:
+
+- Replace `frontier` with an available frontier coding model such as `gpt-5.5`.
+- Replace `balanced` with an available everyday coding model such as `gpt-5.4`.
+- Replace `fast` with another runtime-described fast or economical model.
+- Use `inherit` when no responsible role match exists and inheritance satisfies the task.
+
+For high-risk work, do not silently fall back below `frontier` and `xhigh`. Queue the task or surface the constraint when the runtime or user budget cannot support that floor. For lower-risk work, use the nearest available role and record a fallback only when it materially changes expected quality, latency, cost, or retry risk.
 
 ## User overrides
 
-Honor explicit user preferences such as quality-first, cost-sensitive, a required model, or a reasoning cap when the runtime supports them. Treat the policy above as the default, not as permission to override the user.
+Honor an explicit required model, budget mode, quality preference, or reasoning cap when the runtime supports it. A required model overrides the profile resolver, not the task's safety and verification requirements.
 
-If a user constraint makes a task unsafe or implausible, explain the mismatch and ask only for the smallest necessary decision while independent work continues.
+If a user constraint makes a responsible attempt implausible, explain the mismatch and ask for the smallest necessary decision while independent work continues.

@@ -28,7 +28,7 @@ Use `scripts/ledger.py` without reading its source unless it fails or needs a ch
 
 ## Start or resume
 
-1. Confirm that collaboration is available and inspect the models and reasoning efforts accepted by the spawn tool.
+1. Confirm that collaboration is available, inspect the models and reasoning efforts accepted by the spawn tool, and use the `balanced` budget mode unless the user selected `cost-sensitive` or `quality-first`.
 2. Find the project root and inspect repository instructions and Git state without changing product files.
 3. Initialize and validate the manager state:
 
@@ -71,7 +71,7 @@ Send a worker the current work order for its task and revision, not the raw conv
 
 ## Operate and verify workers
 
-Follow [references/worker-contracts.md](references/worker-contracts.md). Choose each worker's model and reasoning effort with [references/model-policy.md](references/model-policy.md), then record both before dispatch.
+Follow [references/worker-contracts.md](references/worker-contracts.md). Choose each worker's runtime model and reasoning effort with [references/model-policy.md](references/model-policy.md), then record both before dispatch. Minimize total token use across the objective, including retries and repeated context, rather than minimizing the cost of one worker in isolation.
 
 Steer an active worker when its task changes. Send the revision delta and refreshed requirements. Interrupt only when continued work would violate a new constraint or waste substantial effort.
 

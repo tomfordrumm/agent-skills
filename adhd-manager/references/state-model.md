@@ -113,14 +113,16 @@ Set `worker.model` and `worker.reasoning_effort` immediately before dispatch:
 ```json
 "worker": {
   "agent_id": "agent-a1",
-  "model": "gpt-5.6-terra",
-  "reasoning_effort": "high",
+  "model": "gpt-5.6-sol",
+  "reasoning_effort": "xhigh",
   "worktree": "/absolute/project-specific/worktree",
   "branch": "codex/adhd/task-001-r2",
   "base_commit": "abc123",
   "result_commit": null
 }
 ```
+
+This example uses the high-risk floor because the task changes authentication credentials. Resolve every assignment through `model-policy.md`; do not copy this model and effort as general defaults.
 
 Use `"inherit"` when the runtime does not expose an override or deliberate inheritance is selected. Record the effective requested values, not a model guessed from documentation. A ready or blocked task may keep these fields `null` until it is assigned.
 
