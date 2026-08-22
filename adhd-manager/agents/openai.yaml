@@ -2,3 +2,6 @@ interface:
   display_name: "ADHD Manager"
   short_description: "Оркестрирует хаотичный поток задач через субагентов"
   default_prompt: "Используй $adhd-manager, чтобы принять мой поток задач, вести очередь и делегировать всю продуктовую работу субагентам."
+
+policy:
+  allow_implicit_invocation: false
