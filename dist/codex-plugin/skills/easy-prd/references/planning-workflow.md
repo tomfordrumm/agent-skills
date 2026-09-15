@@ -1,6 +1,6 @@
 # Planning workflow
 
-Use this workflow for every Easy PRD run. Keep a private working model until the product, scope, architecture, and slices agree. Templates must follow the analysis, not shape it.
+Use this workflow for a new plan or a broad revision. For a targeted update, use [plan-updates.md](plan-updates.md) instead. Keep a private working model until the product, scope, architecture, and slices agree. Templates must follow the analysis, not shape it.
 
 ## 1. Find the evidence
 
@@ -20,7 +20,7 @@ Classify the starting point as new, scaffold-only, implemented but poorly docume
 
 ## 2. Build a working model
 
-Record only facts needed to decide scope and implementation:
+Track only facts needed to decide scope and implementation. Use the following categories as a reference; no private YAML artifact or fixed analysis order is required:
 
 ```yaml
 product:
@@ -120,6 +120,8 @@ Capability support is not proof of a runtime response shape. For every material 
 
 Choose frontend, server logic, data, authentication, files, integrations, background processing, and deployment separately. Select the simplest combination that satisfies every first-version need. A friendly preset name may summarize the result but must not replace the component list.
 
+For a new frontend, prefer plain HTML, CSS, and JavaScript for a small page with little state. Consider Vite and TypeScript for multiple screens, authentication, API use, reusable modules, or ongoing development. Add a framework when existing code, UI complexity, or a required library justifies it. Preserve a viable existing stack.
+
 ## 7. Set the MVP boundary
 
 Place each candidate capability in `must_have`, `later`, or `out_of_scope`.
@@ -168,7 +170,6 @@ A ready slice states:
 ```yaml
 id:
 title:
-status:
 outcome:
 depends_on: []
 covers: []
@@ -185,12 +186,13 @@ Use automated checks for anything the agent can run or inspect. Reserve human ch
 
 Plan verification at meaningful evidence points, not after every document or layer. Use focused checks during implementation and a full build or suite when a complete path or release candidate exists. Repeat a full gate only when a relevant change could invalidate its result. For lean work, default to one final independent review at most; do not create an automatic review-fix-review loop for lower-impact findings.
 
-Use these statuses:
+Store statuses only in the chosen status owner, not in slice frontmatter. Use these statuses:
 
 - `planned` when details or dependencies remain;
 - `ready` when the slice is specified and unblocked;
 - `in_progress` when implementation has started;
 - `blocked` when a named blocker exists;
+- `deferred` when accepted work is outside the current delivery;
 - `needs_verification` when code may exist but criteria are unproven;
 - `done` when every required check passed.
 

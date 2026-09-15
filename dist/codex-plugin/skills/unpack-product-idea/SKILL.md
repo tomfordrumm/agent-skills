@@ -1,6 +1,6 @@
 ---
 name: unpack-product-idea
-description: Turn an early product idea into a clear Product Brief through an adaptive interview. Use when a user needs help defining the problem, intended users, main journey, first-version scope, constraints, and success criteria before a PRD or implementation. Do not use for architecture, stack selection, market validation, or coding.
+description: Clarify an early product idea through an adaptive interview and write a Product Brief. Use for discovery before PRD creation, not architecture, market validation, or implementation.
 ---
 
 # Unpack product idea
@@ -11,7 +11,7 @@ Help a non-technical user explain what they want to create without requiring pro
 
 - Match the user's language and level of formality.
 - Ask about a concrete situation before asking for features.
-- Ask only the questions needed for the largest current uncertainty. Keep a message to five questions or fewer.
+- Ask one main question at a time about the largest current uncertainty. Group a few closely related questions only when they are easier to answer together or the user requests a questionnaire.
 - Give plain examples when the user may not know how to answer. Present them as examples, not fixed choices.
 - Accept approximate answers and uncertainty. Offer a reasonable default when useful, label it as an assumption, and explain what would change if it is wrong.
 - Reflect the current understanding after a meaningful block of answers. Name contradictions without blaming the user.
@@ -31,7 +31,7 @@ If the user already described the idea, summarize it in a few sentences and ask 
 
 ## Run an adaptive interview
 
-Read [references/interview-map.md](references/interview-map.md) before choosing questions. Use it as a private map, not as a sequence.
+Use [references/interview-map.md](references/interview-map.md) when gaps in the main journey, roles, constraints, or delivery expectations need exploration. Skip it when the next useful question is already clear or the conversation is sufficient to write the brief.
 
 Track relevant areas as:
 
@@ -44,11 +44,7 @@ Start with the problem, audience, desired result, and one real usage story. Move
 
 Before finalizing the first version, understand what the user expects to do with it. In plain language, distinguish a disposable demonstration, a small working product they intend to use, and a dependable public or operational release. Keep the desired result separate from an available time budget. Ask about either only when it remains unclear and the answer could change scope or acceptable tradeoffs.
 
-When identity matters, distinguish one person, one shared account, separate private accounts, and people collaborating in the same workspace. Authentication by itself does not prove which model the product needs.
-
-Replace broad labels with concrete cases. If the audience is "everyone," ask who feels the problem first. If the value is "convenience," ask what becomes faster, cheaper, safer, or less error-prone. If the input is a feature list, ask which problem and user action each feature supports.
-
-Do not repeat answered questions. When a new answer conflicts with an earlier one, state both interpretations and ask which to keep.
+Resolve contradictions that affect the main flow or first version. Do not repeat answered questions.
 
 ## Know when to stop
 
@@ -68,11 +64,13 @@ Not every area must be confirmed. If the user wants to move quickly, keep non-bl
 
 ## Confirm and write the brief
 
-Before writing, show a short synthesis of the product, audience, problem, main flow, MVP boundary, delivery expectations, and any unresolved choice that would materially change the brief. Ask for correction or confirmation.
+Before writing, show a short synthesis of the product, audience, problem, main flow, MVP boundary, delivery expectations, and any unresolved choice that would materially change the brief.
 
-If the user asks to proceed without more questions, that request counts as confirmation. Show the synthesis, label uncertainty, and create the brief in the same response.
+A request to write the brief, collect what was discussed, or proceed without more questions authorizes writing it. When no material contradiction remains, show the synthesis, label uncertainty, and save the brief in the same turn without another confirmation. Otherwise, ask about the unresolved choice while preparing unaffected content.
 
-After confirmation, read [references/product-brief-template.md](references/product-brief-template.md). Include only sections that carry useful information for this product.
+During exploratory conversation with no request to write, ask for correction or confirmation before saving the brief.
+
+When ready to write, read [references/product-brief-template.md](references/product-brief-template.md). Include only sections that carry useful information for this product.
 
 Save the result as `PROJECT_BRIEF.md` at the project root when the workspace is writable, unless the user names another path. Inspect an existing file before updating it and preserve still-valid content.
 

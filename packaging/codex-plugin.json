@@ -1,7 +1,7 @@
 {
   "plugin": {
     "name": "agent-skills",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Portable skills for coding agents.",
     "repository": "https://github.com/tomfordrumm/agent-skills.git",
     "homepage": "https://github.com/tomfordrumm/agent-skills",
@@ -16,7 +16,10 @@
       "shortDescription": "Portable skills for coding agents.",
       "longDescription": "A curated collection of reusable skills for Codex and other coding agents.",
       "category": "Productivity",
-      "capabilities": ["Read", "Write"]
+      "capabilities": [
+        "Read",
+        "Write"
+      ]
     }
   },
   "skills": [

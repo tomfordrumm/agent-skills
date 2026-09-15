@@ -1,6 +1,6 @@
 # Routing policy
 
-Apply this policy to every atomic intent after reconciling it with the current ledger.
+Use this policy when multiple tasks need scheduling or a steering message changes routing. For one bounded outcome, keep one worker and use the simpler path in SKILL.md.
 
 ## Contents
 
@@ -110,7 +110,7 @@ After every ledger update or worker event:
 1. Recompute dependencies and conflicts.
 2. Release ownership from terminal or explicitly handed-off tasks.
 3. Rank ready work by safety, user impact, dependency unblocking, age, and batching efficiency.
-4. Reserve slots for integrators when completed code is waiting; unfinished integration is work in progress.
+4. Reserve an integrator slot when multiple branches need combining or cross-task conflicts need repair. Accept a verified single-branch deliverable without a separate integration task when it meets the agreed delivery target.
 5. Spawn only tasks with an available slot and exclusive scope.
 6. If nothing can start, report the smallest real blocker rather than asking broad questions.
 7. Validate state and sync the status snapshot.

@@ -24,7 +24,7 @@ If the installed skill is below the manifest's minimum supported version, do not
 
 ## Normalize capabilities
 
-Build a private map before choosing architecture. Extend it when the live skill exposes new categories.
+Map only capabilities required by the project before choosing architecture. The categories below are examples to select from, not a checklist to populate. Add categories only when a confirmed need requires them.
 
 ```yaml
 platform:
@@ -192,7 +192,7 @@ Project documentation records the Y-Hub capabilities this project depends on; it
 
 Do not refresh Y-Hub context for code questions, copy or style edits, local UI changes, or refactors and bug fixes that do not change platform dependencies.
 
-Refresh current Y-Hub context before assessing a new feature's feasibility; changing storage, authentication, permissions, server-side logic, secrets, SDK usage, integrations, or deployment; implementing the first slice that depends on a platform capability; creating fixtures or adapters for an external response shape; and performing the first production deployment.
+Refresh relevant Y-Hub context when feasibility depends on an unverified platform capability, when a change alters a platform contract or dependency, before first use of a material capability or external response shape, and before the first production deployment. Reuse verified evidence while its contract and source remain current.
 
 To refresh, read the live agent manifest, obtain a current supported `yhub-deploy-site` skill when necessary, inspect only relevant sections, compare them with the project's platform contract, and update documentation only when an actual dependency or constraint changed. Do not change architecture merely because an optional new capability appeared.
 ```

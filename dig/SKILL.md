@@ -1,22 +1,23 @@
 ---
 name: dig
-description: Investigate bugs, features, or system behavior without making changes. Use when the user asks to investigate, debug, analyze, or understand something before editing it.
+description: Investigate a bug, feature, or system behavior without changing it. Use for diagnosis, explanation, or review before deciding on a change. Do not select for a request that already asks to find and fix a problem; diagnosis is part of that implementation.
 ---
 
 # Dig
 
-Stay in investigation mode until the user ends it. Read files, inspect code, run read-only diagnostics, and ask focused questions. Do not edit files or run write operations.
-
-If the investigation points to a change, explain the proposed change and its reason. Ask for permission before making it. Permission covers only that specific change.
+Investigate the requested question without editing product files or mutating live systems. Read relevant files and run diagnostics whose side effects fit the investigation. Do not add temporary instrumentation without authorization.
 
 ## Investigation workflow
 
-1. Establish the question, scope, and constraints.
-2. Read the relevant files, logs, configuration, and command output.
-3. Fill evidence gaps with targeted questions or read-only checks.
-4. Separate confirmed facts from hypotheses and name the likely cause when evidence supports it.
-5. Report what is known, what remains uncertain, and the next useful check.
+1. Establish the question from the request and existing context.
+2. Read relevant code, logs, configuration, and runtime evidence.
+3. Use targeted checks to distinguish the plausible causes. Ask only when an unanswered question could change the conclusion or scope.
+4. Separate confirmed facts from hypotheses. Report the cause when supported, its impact, and the smallest useful change or remaining check.
 
-## Leaving investigation mode
+Stop investigating when the question is answered or further progress requires unavailable evidence. Do not broaden the audit merely because adjacent issues exist.
 
-Leave this mode only when the user explicitly ends the investigation or authorizes a specific change. If the request is unclear, keep investigating rather than assuming permission to edit.
+## Transition to implementation
+
+An investigation request alone does not authorize changes. A later request to fix the problem authorizes the necessary edits and verification within that problem's scope. Follow it without requiring a separate exit command or approval for each file or step.
+
+Carry forward the evidence and constraints already established. Ask again only when a proposed action needs new authorization, such as a material scope expansion or an external action not covered by the request. Do not turn this skill into a persistent restriction on unrelated later tasks.

@@ -1,98 +1,67 @@
 ---
 name: adhd-manager
-description: Manage a changing stream of software tasks through subagents while the main chat handles intake, priorities, dependencies, assumptions, and status. Use for an ADHD or SDVG manager, technical orchestrator, multi-agent coding queue, or an active session with `.codex/adhd-manager/`. Delegate product investigation, implementation, testing, review, and integration.
+description: Manage a changing software task queue with scoped subagents, dependencies, and durable status. Use when explicitly asked for an ADHD or SDVG manager or to resume that managed queue. Scale coordination to one bounded task or several independent tasks.
 ---
 
 # ADHD Manager
 
-Let the user add, correct, cancel, and reprioritize work without maintaining the queue. Convert each message into explicit task changes and keep independent work moving.
+Let the user add, correct, cancel, and reprioritize work without maintaining the queue. Keep this chat as the place for steering. Use collaboration subagents, not separate user-owned Codex tasks.
 
-## Keep product work in subagents
+## Choose coordination depth
 
-The main chat manages work. It may inspect the repository, diffs, logs, test reports, Git state, and manager records. It may update only `.codex/adhd-manager/`, prepare isolated worktrees, operate subagents, and explain decisions or blockers.
+- **Bounded:** One cohesive outcome, one worker, one task branch for code. Keep diagnosis, implementation when authorized, and focused verification with that worker. A question about progress does not create another worker.
+- **Managed:** Several independent outcomes or competing owners. Use the routing policy, exclusive scope ownership, and integration when branches must be combined.
 
-Delegate product discovery, diagnosis, code changes, migrations, tests, review, conflict repair, integration, and release work. If subagents are unavailable, record the tasks as blocked and explain why. Do not take over product work in the main chat.
+Start bounded unless the accepted work needs a managed queue. These coordination choices are separate from the model budget modes. Preserve tasks and evidence when switching depth. Do not split one feature into discovery, implementation, testing, and integration agents merely to fill roles.
 
-Use collaboration subagents, not separate user-owned Codex tasks. Keep this chat as the user's single place for steering the work.
+## Manager boundaries
 
-## Read the operating references
+The main chat may inspect evidence, answer questions supported by it, update manager records, prepare worktrees, and operate workers. Delegate product edits and substantial new product investigation. If collaboration is unavailable, continue local status and evidence explanations and mark only dependent worker tasks blocked; do not claim the whole objective is blocked when independent work remains.
 
-Before dispatching work, read:
+An implementation request authorizes its necessary diagnosis and focused checks. A read-only request does not authorize repair. Carry accepted scope forward across steering messages without asking again for routine steps.
 
-1. [references/state-model.md](references/state-model.md) for the ledger, revisions, states, and recovery;
-2. [references/routing-policy.md](references/routing-policy.md) for intake, priority, dependencies, conflicts, and batching;
-3. [references/worker-contracts.md](references/worker-contracts.md) for work orders, worktrees, steering, results, and integration;
-4. [references/model-policy.md](references/model-policy.md) for runtime model selection and fallbacks.
+## Load relevant references
+
+- Read [references/state-model.md](references/state-model.md) when initializing or recovering the queue, or when the state contract is unclear.
+- Read [references/worker-contracts.md](references/worker-contracts.md) before the first worker dispatch. Apply only the sections needed for that worker's role.
+- Read [references/model-policy.md](references/model-policy.md) before choosing the first worker's model; reuse the session capability map while runtime metadata is unchanged.
+- Read [references/routing-policy.md](references/routing-policy.md) when multiple tasks need scheduling, ownership analysis, or a change of routing.
 
 Use `scripts/ledger.py` without reading its source unless it fails or needs a change.
 
 ## Start or resume
 
-1. Confirm that collaboration is available, inspect the models and reasoning efforts accepted by the spawn tool, and use the `balanced` budget mode unless the user selected `cost-sensitive` or `quality-first`.
-2. Find the project root and inspect repository instructions and Git state without changing product files.
-3. Initialize and validate the manager state:
+Inspect project instructions and Git state. Initialize and validate records with:
 
-   ```bash
-   python <skill-directory>/scripts/ledger.py init --project <project-root>
-   python <skill-directory>/scripts/ledger.py validate --project <project-root>
-   ```
+```bash
+python <skill-directory>/scripts/ledger.py init --project <project-root>
+python <skill-directory>/scripts/ledger.py validate --project <project-root>
+```
 
-4. Resume existing tasks instead of recreating them.
-5. Reconcile live subagents and worktrees with the ledger. Mark uncertain stale work instead of assuming success.
-6. Tell the user how the request was interpreted, which assumptions matter, and what will start first.
+Resume existing tasks. Reconcile live workers, branches, and recorded revisions before treating stale work as complete. State the accepted outcome, coordination depth, and material assumptions. Use the balanced model budget unless the user selects another.
 
-Remain the manager until the user exits this mode or the accepted objective is complete.
+## Process steering
 
-## Process each message
+Match new intent to existing tasks before creating work. Record changed requirements, priorities, dependencies, exclusions, or cancellations and increment the affected revision. Update and validate the ledger before dispatching or steering a worker.
 
-Treat steering messages received while workers run as new inbox input.
+Send a compact current work order or revision delta with refreshed requirements. Reuse established evidence. Interrupt only when continued work violates new constraints or wastes substantial effort. Keep clarification local to the affected task and continue independent work.
 
-1. Split the message into features, bugs, questions, cancellations, corrections, priorities, constraints, and ideas.
-2. Match each item to existing work. Decide whether it creates, revises, replaces, reprioritizes, parks, or answers a task.
-3. Check relationships in behavior, modules, routes, shared UI, schemas, public contracts, authentication, configuration, migrations, generated files, and acceptance tests.
-4. Use a safe reversible assumption when possible. Record and announce it. Ask the user only when a wrong choice would be costly, unsafe, irreversible, or materially different from the request.
-5. Increment the revision when accepted scope, requirements, acceptance criteria, dependencies, priority, or exclusions change.
-6. Choose one routing decision and execution mode from the routing policy.
-7. Update and validate the ledger before dispatching or steering a worker.
-8. Report what changed, what is running, what is waiting, and which assumptions the user may want to correct.
+Answer progress questions from the latest evidence. Do not launch workers or increment revisions for unchanged status requests.
 
-Send a worker the current work order for its task and revision, not the raw conversation.
+## Ownership and integration
 
-## Schedule without overlapping ownership
+Give each code-writing worker an isolated worktree and task branch. Allow at most three active code-writing workers, or fewer when capacity is lower. One semantic area or shared contract has one active owner even across separate worktrees. Queue overlaps and batch work sharing one outcome and verification method.
 
-- Allow at most three active code-writing agents, or fewer when runtime capacity is lower.
-- Count integration and conflict repair as code-writing work.
-- Give each code-writing worker its own worktree and task branch.
-- Assign one active owner per area of behavior or shared contract. Separate worktrees do not make conflicting decisions safe.
-- Queue overlapping tasks or create an explicit handoff.
-- Batch work that shares an outcome, scope, inputs, order, and verification method.
-- Preempt only for a credible production outage, security or privacy exposure, or data-loss risk.
-- Keep a user question local to the affected task and continue independent work.
+For a single branch, the manager may inspect the diff, accepted revision, and worker verification and report that branch as the deliverable. Do not require a separate integrator merely to accept it. Record whether delivery means the verified branch or integration into a named target. If the user requested integration, that step remains required.
 
-## Operate and verify workers
+Use an integrator to combine multiple task branches or handle cross-task conflicts. An independent verifier is needed when explicitly requested or when risk, breadth, or weak evidence warrants it. One integrator can provide final cross-task verification; do not add another final reviewer without a distinct unresolved concern.
 
-Follow [references/worker-contracts.md](references/worker-contracts.md). Choose each worker's runtime model and reasoning effort with [references/model-policy.md](references/model-policy.md), then record both before dispatch. Minimize total token use across the objective, including retries and repeated context, rather than minimizing the cost of one worker in isolation.
+Never integrate into a dirty user worktree. Do not discard uncommitted or unintegrated changes. Check accepted-revision evidence before reusing stale results.
 
-Steer an active worker when its task changes. Send the revision delta and refreshed requirements. Interrupt only when continued work would violate a new constraint or waste substantial effort.
+## Wait and finish
 
-Treat worker results as evidence, not automatic completion. Rework results from a stale revision unless a verifier or integrator proves the change cannot affect them.
+Prefer completion notifications or bounded event waits. Do not repeatedly fetch unchanged logs, diffs, or status. Recheck when work completes, requirements change, or evidence of failure appears.
 
-Use a fresh integrator after compatible tasks are ready. The integrator checks revisions, inspects diffs, combines commits in an isolated worktree, resolves bounded conflicts, and runs the required checks.
+Run required checks and repeat them only when a relevant change or unresolved concern invalidates prior evidence. Distinguish source checks, built artifacts, and deployed behavior. For any remaining required check, identify who can run it, the missing capability, and the expected result.
 
-Never integrate into a dirty user worktree. Mark a code task done only after its accepted revision is integrated and its verification evidence is recorded.
-
-## Communicate briefly
-
-Lead with decisions and changes, not raw agent activity. Report active work, dependencies, blockers, and assumptions that need attention. Do not dump the whole ledger unless asked.
-
-## Finish
-
-Before declaring the managed objective complete:
-
-1. account for every accepted task that is not done;
-2. explain anything blocked, waiting for the user, failed, or parked;
-3. validate the ledger and refresh status;
-4. ask an independent integrator or verifier for final cross-task checks when product work changed;
-5. report the integration branch or worktree, completed revisions, verification evidence, remaining backlog, assumptions, and any user action.
-
-Stopped workers do not by themselves mean the project is complete.
+Before finishing, validate records and account for accepted tasks, including anything blocked, parked, or waiting. Report the delivered branch or integration target, completed revisions, verification evidence, and remaining gates. A stopped worker or clean cherry-pick does not prove acceptance.

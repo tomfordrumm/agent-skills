@@ -113,8 +113,8 @@ Set `worker.model` and `worker.reasoning_effort` immediately before dispatch:
 ```json
 "worker": {
   "agent_id": "agent-a1",
-  "model": "gpt-5.6-sol",
-  "reasoning_effort": "xhigh",
+  "model": "inherit",
+  "reasoning_effort": "inherit",
   "worktree": "/absolute/project-specific/worktree",
   "branch": "codex/adhd/task-001-r2",
   "base_commit": "abc123",
@@ -122,7 +122,7 @@ Set `worker.model` and `worker.reasoning_effort` immediately before dispatch:
 }
 ```
 
-This example uses the high-risk floor because the task changes authentication credentials. Resolve every assignment through `model-policy.md`; do not copy this model and effort as general defaults.
+This example records deliberate inheritance. Resolve the actual model and effort through `model-policy.md` for the changed behavior and available verification; do not copy example settings as defaults.
 
 Use `"inherit"` when the runtime does not expose an override or deliberate inheritance is selected. Record the effective requested values, not a model guessed from documentation. A ready or blocked task may keep these fields `null` until it is assigned.
 
@@ -182,6 +182,8 @@ inbox -> triaged -> ready -> running -> verifying
 verifying -> ready_to_integrate -> integrating -> done
 ```
 
+For a bounded branch deliverable or a read-only answer, `verifying -> done` is also valid when the agreed acceptance evidence exists. Do not create integration tasks merely to traverse states.
+
 Use these side states when justified:
 
 ```text
@@ -195,7 +197,7 @@ Rules:
 - `failed` requires attempted work and failure evidence; retry by revising or creating a repair task.
 - `superseded` requires `superseded_by` to identify a task or source message.
 - `parked` is accepted backlog, not silently discarded work.
-- `done` requires accepted-revision evidence and integration, except a discovery-only task whose deliverable is a decision or work order.
+- `done` requires accepted-revision evidence and the agreed delivery target. A bounded task may finish with one verified task branch when that is the deliverable; record its commit and delivery boundary in `notes`. If integration into another branch or deployment was requested, a worker branch alone is incomplete. Read-only tasks finish with their verified answer or work order.
 - Keep scope ownership until integration, cancellation, supersession, or an explicit handoff releases it.
 
 ## Revision rules

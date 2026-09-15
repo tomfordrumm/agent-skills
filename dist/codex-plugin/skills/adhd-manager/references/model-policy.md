@@ -10,17 +10,17 @@ Before the first dispatch, inspect the current subagent spawn tool metadata:
 2. List the reasoning-effort values accepted for each model.
 3. Read any runtime descriptions that identify a model as fast, balanced, or frontier.
 4. Treat this runtime metadata as authoritative for dispatch. Do not attempt a model or effort merely because documentation names it.
-5. Use `inherit` when overrides are unavailable or deliberate inheritance is the best choice.
+5. Use `inherit` in records when overrides are unavailable or deliberate inheritance is the best choice. Omit the corresponding spawn argument; `inherit` is a ledger value, not a model ID or effort to pass to the tool.
 
-Build a small session-local capability map. Do not persist a catalog that will become stale. The current model families may provide these role hints when the runtime exposes them:
+Build a session-local capability map from runtime descriptions, not model-name ordering. Do not persist a catalog or probe unavailable models.
 
-| Profile | Current primary | Compatibility fallback |
-|---|---|---|
-| `fast` | `gpt-5.6-luna` | Another runtime-described fast or economical coding model |
-| `balanced` | `gpt-5.6-terra` | `gpt-5.4`, then another runtime-described everyday coding model |
-| `frontier` | `gpt-5.6-sol` | `gpt-5.5`, then another runtime-described frontier coding model |
+| Profile | Resolve from current runtime metadata |
+|---|---|
+| `fast` | Fast or economical model suitable for objectively verifiable, bounded work |
+| `balanced` | Everyday coding model suitable for the task's implementation scope |
+| `frontier` | Most capable available model described as suitable for complex or demanding work |
 
-These names are hints, not an availability claim. Classify a newly exposed model from the spawn tool's description. If its role is unclear, do not guess from its name. Use `inherit`, a known available model, or ask only when the choice materially affects the task.
+Do not pin a family as the permanent primary or fallback. Use inheritance when it fits or when overrides are unavailable. If the role is unclear, use a known available fit; ask only when the uncertainty materially affects the task.
 
 ## Budget modes
 
@@ -29,7 +29,7 @@ Select one budget mode for the managed session. On resume, recover the latest re
 | Mode | Policy |
 |---|---|
 | `balanced` | Use the lowest profile and effort likely to complete the task in one sound attempt. Spend more when a retry would probably cost more than the stronger first attempt. |
-| `cost-sensitive` | Prefer `fast` for reversible, bounded work and `balanced` for broader work. Keep the safety floors below. Queue work or surface the constraint when the user's cap cannot support a responsible attempt. |
+| `cost-sensitive` | Prefer `fast` for reversible, bounded work and `balanced` for broader work. Preserve the verification requirements below. Queue work or surface the constraint when the user's cap cannot support a responsible attempt. |
 | `quality-first` | Raise effort for ambiguous, broad, or hard-to-verify work and move to `frontier` earlier. Do not spend frontier tokens on mechanical work that a smaller model can verify objectively. |
 
 Record a user-selected non-default mode or a later mode change in `decisions.md`. Apply a mode change to future dispatches. Do not replace a running worker solely to apply the new mode.
@@ -45,44 +45,21 @@ Choose the model profile and effort independently:
 | Routine diagnosis, implementation, or independent verification within one understood area | `balanced` | `medium` |
 | Multi-file work, uncertain diagnosis, shared-contract review, or bounded integration | `balanced` | `high` |
 | Architecture, semantic merge conflicts, cross-system diagnosis, or a broad critical path | `frontier` | `high` |
-| Security, authentication, authorization, payments, privacy, destructive migrations, or credible data-loss risk | `frontier` | `xhigh` |
+| A change to security boundaries, payment rules, sensitive-data handling, or destructive behavior with broad impact or difficult verification | `frontier` | `high`, escalating to `xhigh` when uncertainty warrants it |
 
-Raise the baseline only for evidence such as contradictory findings, broad contract impact, weak verification, or a failed sound attempt. Task priority alone does not justify a stronger model.
+Raise the baseline only for evidence such as contradictory findings, broad contract impact, weak verification, or a failed sound attempt. Task priority or a security-related filename alone does not justify a stronger model. A copy edit on a login screen does not change authentication. A permission enforcement change does, and requires explicit checks of allowed and denied behavior.
 
-For `cost-sensitive`, move reversible tasks down by at most one profile or one effort level. Do not move below the high-risk floor. For `quality-first`, move ambiguous or broad tasks up by one effort level or one profile. Keep mechanical tasks on `fast` unless the evidence itself is difficult to interpret.
+For `cost-sensitive`, move reversible tasks down by at most one profile or one effort level. Do not reduce required authorization, isolation, rollback, or behavioral verification. For `quality-first`, move ambiguous or broad tasks up by one effort level or one profile. Keep mechanical tasks on `fast` unless the evidence itself is difficult to interpret.
 
-## Reasoning effort
+## Dispatch selection
 
-Use the effort ladder exposed by the runtime. A common order is:
+Use the baseline above as a starting point, then adjust for uncertainty, verification strength, and prior attempts. Resolve the profile and effort from current runtime metadata; request only supported values. Prefer a stronger first attempt when known retry risk outweighs its cost.
 
-```text
-low < medium < high < xhigh < max < ultra
-```
+Use `max` or `ultra` only when available and difficult work or a failed sound attempt warrants the extra effort. Record the reason for these settings or a departure from the selected budget mode in `decisions.md`.
 
-Not every model exposes every value. Request only a supported value.
+Record `worker.model` and `worker.reasoning_effort` before dispatch. Use `inherit` when inheritance is selected, omitting the corresponding spawn arguments.
 
-- Use `low` for mechanical work with an objective check.
-- Use `medium` as the normal starting point for bounded tool-using work.
-- Use `high` when the task requires exploration across files or contracts.
-- Use `xhigh` for high-risk work or genuinely difficult reasoning.
-- Use `max` only after `xhigh` was insufficient or the hardest quality-first task has a concrete reason for it.
-- Use `ultra` only when the runtime exposes it and the user explicitly prioritizes maximum quality, or when a documented failed attempt shows that the extra spend is warranted.
-
-Record the reason for `max`, `ultra`, or any departure from the selected budget mode in `decisions.md`.
-
-## Selection procedure
-
-For each ready task:
-
-1. Identify the task's scope, reversibility, contract impact, safety risk, uncertainty, verification strength, and prior attempts.
-2. Choose the session budget mode's baseline profile and effort.
-3. Estimate retry risk. Prefer the next stronger first attempt when the cheaper choice is likely to fail for a known reason.
-4. Resolve the profile to an available runtime model.
-5. Choose the intended effort, then clamp it to a value that model accepts. Do not exceed the intended effort merely because a higher value exists.
-6. Record the requested `worker.model` and `worker.reasoning_effort` before dispatch.
-7. Use `fork_turns: "none"` with a compact self-contained work order by default. Use a small bounded fork only when recent task-local context would be more compact than restating it. Full-history forks must inherit when the runtime requires it.
-
-Do not send repository-wide history, the raw user conversation, or unrelated ledger entries to a worker. Include enough evidence and constraints to avoid rediscovery, but keep the work order local to the accepted task revision.
+Use `fork_turns: "none"` with a compact self-contained work order by default. A bounded fork may be useful when recent task-local context is shorter than restating it. Full-history forks must inherit when the runtime requires it. Send only evidence and constraints needed for the accepted task revision.
 
 ## Retry and escalation
 
@@ -95,16 +72,13 @@ Do not rerun the same work order with the same model and effort unless new evide
 
 Preserve useful evidence from every attempt. Do not ask a replacement worker to rediscover facts already established.
 
-## Fallbacks and safety floors
+## Fallbacks and verification
 
-Resolve fallbacks by role, not by model-name ordering:
+Resolve fallbacks by the runtime-described role and supported effort. Do not select an older named model from a static list. Use inheritance when it is a responsible fit.
 
-- Replace `frontier` with an available frontier coding model such as `gpt-5.5`.
-- Replace `balanced` with an available everyday coding model such as `gpt-5.4`.
-- Replace `fast` with another runtime-described fast or economical model.
-- Use `inherit` when no responsible role match exists and inheritance satisfies the task.
+Model size and reasoning effort are not safety guarantees. Preserve checks for changed trust boundaries, ownership, payments, privacy, and destructive behavior regardless of the selected model. Prefer independent review when the impact or weak evidence warrants it. If available models or access cannot support a responsible attempt, explain the concrete limitation and continue unaffected work.
 
-For high-risk work, do not silently fall back below `frontier` and `xhigh`. Queue the task or surface the constraint when the runtime or user budget cannot support that floor. For lower-risk work, use the nearest available role and record a fallback only when it materially changes expected quality, latency, cost, or retry risk.
+When changing a previously effective model or lowering effort, compare outcomes on representative requests with the same acceptance checks before adopting the cheaper setting as the new baseline. Record task completion, retries, user interventions, latency, and token usage when exposed. Do not infer savings from effort labels or claim usage numbers that the runtime does not report.
 
 ## User overrides
 

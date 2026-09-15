@@ -14,7 +14,9 @@ Use current work orders so workers receive accepted intent instead of the user's
 
 ## Universal contract
 
-Every work order must state:
+For a bounded task, state its ID and revision, objective, owned scope, material constraints, acceptance checks, and expected deliverable. Omit empty fields and repeated boilerplate. Add model settings, dependencies, assumptions, or role details when they affect execution.
+
+For managed work with multiple owners, use the fuller contract as needed:
 
 ```text
 Task and revision
@@ -79,8 +81,8 @@ Use this form:
 Implement TASK-019 revision 2 in the assigned worktree.
 
 Runtime:
-- model: gpt-5.6-terra
-- reasoning effort: medium
+- model: inherit
+- reasoning effort: inherit
 
 Objective:
 Fix the mobile placement of the registration submit button.
@@ -113,6 +115,8 @@ Return:
 - risks or follow-up work;
 - commit SHA on the assigned task branch.
 ```
+
+Resolve model settings for the actual task rather than copying this example. For a bounded implementation, include necessary diagnosis and focused verification in the same order when authorized.
 
 Give a code-writing worker a task branch and absolute worktree path. Instruct it to commit only its scoped product changes. Manager-state files belong to the orchestrator and must not be committed from worker worktrees.
 
@@ -162,6 +166,10 @@ The orchestrator must reconcile newly discovered tasks without silently adding t
 
 Use an independent verifier when risk, breadth, or weak worker evidence warrants it. The verifier receives acceptance criteria and artifacts, not the implementer's confidence or desired verdict.
 
+For a bounded task with one branch as the agreed deliverable, the manager can accept that branch after inspecting the accepted revision, diff, and focused verification evidence. No separate integrator is required. If integration into another target was requested, assign that step to the current worker or an integrator and verify the result before claiming completion.
+
+Use a separate integrator when combining multiple branches or resolving cross-task conflicts. Its cross-task checks can also satisfy the final verification requirement.
+
 Give the integrator:
 
 - target integration branch and worktree;
@@ -181,7 +189,7 @@ Require the integrator to:
 6. run focused checks and the appropriate broader suite;
 7. return the final commit, exact test results, residual risks, and rejected or deferred commits.
 
-Do not mark tasks done merely because commits cherry-picked cleanly.
+Do not mark tasks done merely because commits cherry-picked cleanly. Repeat successful checks only when integration or a later edit could invalidate their evidence. Keep source, build, and deployment evidence distinct; identify the owner and missing capability for any unperformed required check.
 
 ## Worktree policy
 

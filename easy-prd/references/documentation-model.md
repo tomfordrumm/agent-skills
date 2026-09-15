@@ -79,13 +79,12 @@ For each significant decision, record its ID, status, date, source, context, cho
 
 ### Slice files
 
-Use frontmatter for fields that agents need to scan:
+Use frontmatter for stable slice identity, dependencies, and requirement coverage. Keep mutable status only in STATE.md and link there from the slice:
 
 ```yaml
 ---
 id: S002
 title: Create and view a task
-status: ready
 depends_on:
   - S001
 covers:
@@ -142,7 +141,7 @@ Create or update one marked block and preserve everything outside it:
 ### Load only relevant context
 
 - For a code question or local fix, read the affected code and tests. Read product documents only when expected behavior is unclear.
-- For planned implementation, read current state, the selected slice, and documents linked from that slice.
+- For planned implementation, read current state and the selected slice; consult linked document sections only when needed for its behavior or contracts.
 - For a new feature, read product scope, relevant decisions, and related slices. Create or update a slice before implementation.
 - For data, architecture, integration, authentication, or deployment changes, read the matching technical contract and decisions.
 - For an unplanned bug, update documents only when behavior, a contract, architecture, data shape, or the plan changes.
@@ -168,6 +167,6 @@ When Y-Hub is part of the project, add the refresh subsection from `yhub-adapter
 
 ## Status ownership
 
-In Compact, `PLAN.md` owns status. In Standard and Extended, `STATE.md` owns it. Other files may show summaries but must link to the owner when a conflict appears.
+In Compact, `PLAN.md` owns status. In Standard and Extended, `STATE.md` owns it. Other files link to the owner instead of repeating mutable statuses. A generated status view is acceptable only when an existing tool derives it from the owner; do not maintain a second copy by hand. When updating legacy documents, reconcile touched duplicates against evidence and replace them with links without migrating unrelated files.
 
 New slices start as `ready` only when specified and unblocked. Later slices start as `planned`. Existing behavior starts as `needs_verification` until its criteria are checked.

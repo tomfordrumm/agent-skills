@@ -9,11 +9,11 @@ People using CLI agents like Codex, Claude Code, or any LLM agent that supports 
 ## Skills
 
 - `dig` - Investigation-only mode for understanding bugs, features, or system behavior without making changes.
-- `adr-logger` - Log an Architectural Decision Record (ADR) entry while the agent is working.
+- `adr-logger` - Record significant decisions in the existing project log; per-task logging is opt-in.
 - `sviat-engineering` - Senior engineering thinking, development, debugging, and review process.
 - `unpack-product-idea` - Turn a vague product idea into a clear Product Brief through a beginner-friendly adaptive interview.
 - `easy-prd` - Turn a Product Brief into an implementation-ready PRD, adaptive documentation, and vertical delivery slices.
-- `adhd-manager` - Orchestrate a changing stream of development tasks through isolated subagents while the main chat manages priorities, dependencies, and assumptions.
+- `adhd-manager` - Manage a changing task queue with one worker for a bounded outcome and coordination for independent work. Explicit invocation only.
 
 ## Getting started
 
@@ -56,3 +56,16 @@ Issues and pull requests are welcome. Please keep skill instructions concise and
 ## License
 
 MIT. See `LICENSE`.
+
+## Keep one installation source
+
+Choose the Codex plugin or standalone skill folders, not both. For standalone use,
+install only the six top-level skill directories in one user skill directory.
+Keep repository clones and backups outside skill discovery directories so generated
+bundles are not discovered as additional copies. When replacing an existing install,
+compare the complete folders and preserve local changes before moving duplicates.
+
+## Behavioral checks
+
+[evals/README.md](evals/README.md) describes a small scenario set for checking skill
+updates and model changes. Packaging checks verify artifacts, not agent behavior.

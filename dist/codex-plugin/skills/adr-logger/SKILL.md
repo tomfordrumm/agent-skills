@@ -1,35 +1,31 @@
 ---
 name: adr-logger
-description: Enforce Architectural Decision Records (ADR) logging for every task. Use when a user asks to create, update, or enforce ADRs, or when a workflow requires logging decisions in an ADR directory with daily files named adr_yyyy_mm_dd.md.
+description: Record significant architecture, contract, operational, or technical-debt decisions in the project's existing decision log. Use when asked to document decisions or when the project requires ADRs. Log every task only when explicitly required.
 ---
 
 # ADR logger
 
-Log one decision entry for each task in the daily file `ADR/adr_yyyy_mm_dd.md`.
+Record decisions a future maintainer needs to understand: a changed architecture or public contract, an operational tradeoff, or accepted technical debt with a condition for revisiting it. Routine implementation, status updates, and investigations with no accepted decision do not need an ADR.
 
-## Workflow
+## Choose the destination
 
-1. Locate the project root in the current workspace.
-2. Ensure an `ADR/` directory exists at the root; create it if missing.
-3. Use today's local date to select the file name: `ADR/adr_yyyy_mm_dd.md`.
-4. If the file exists, append a new entry; if not, create it with a header and the first entry.
-5. Each task must produce exactly one entry.
+Inspect project instructions and existing records first. Use the existing ADR convention or decision log, including an Easy PRD `DECISIONS.md` or decisions section. Do not create a second owner for the same decision.
 
-## Entry format
+If a significant decision needs recording and no convention exists, use `ADR/adr_yyyy_mm_dd.md` with the local date. Preserve existing content. Append a new decision or update a proposal's status without rewriting the history of an accepted decision.
 
-Append this structure under the file header:
+Recording a decision does not authorize implementation. In a read-only task, return a proposed entry unless the user also requested a documentation update.
 
-```
-## HH:MM - <task title>
+## Entry contents
 
-### Context
-- <what prompted the decision or change>
+Use the existing format. Otherwise include:
 
-### Decision
-- <what was decided or done>
+- Local date/time and a concrete title.
+- Context and the constraint that required a choice.
+- Decision, its source, and whether it is proposed or accepted.
+- Consequences, tradeoffs, and any condition for revisiting it.
 
-### Consequences
-- <impact, tradeoffs, or follow-up>
-```
+Distinguish an agent recommendation from a user-confirmed decision. Link to supporting evidence when it will help a later reader. Keep the entry proportional to the decision.
 
-Use local time for `HH:MM`. Keep the entry short and specific to the task. If the task has no architectural impact, write `No architectural impact` under Consequences.
+## Explicit per-task logging
+
+When the user or project explicitly requires a daily entry for every task, append exactly one entry per task, using the established daily log. For a task without architectural impact, record that fact briefly. This mode is optional and does not apply to other projects or override a read-only boundary.

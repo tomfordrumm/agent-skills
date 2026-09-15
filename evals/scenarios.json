@@ -1,0 +1,216 @@
+[
+  {
+    "id": "dig_read_only",
+    "skill": "dig",
+    "setup": "A fixture repository has a reproducible calculation bug.",
+    "prompt": "Разберись, почему итог считается неправильно. Пока ничего не меняй.",
+    "checks": [
+      "Evidence-backed diagnosis",
+      "No product edits"
+    ]
+  },
+  {
+    "id": "dig_fix_transition",
+    "skill": "dig",
+    "setup": "The previous turn established the root cause and affected files.",
+    "prompt": "Ок, исправь эту проблему.",
+    "checks": [
+      "Scoped repair and verification",
+      "No repeated approval per file",
+      "No unrelated cleanup"
+    ]
+  },
+  {
+    "id": "dig_negative",
+    "skill": "dig",
+    "setup": "A small reproducible bug in a fixture.",
+    "prompt": "Найди и исправь ошибку.",
+    "checks": [
+      "Treat diagnosis as part of authorized implementation",
+      "Do not impose persistent investigation-only mode"
+    ]
+  },
+  {
+    "id": "focused_verification",
+    "skill": "sviat-engineering",
+    "setup": "Login button label typo; focused rendering check passes. No authentication logic changes.",
+    "prompt": "Исправь опечатку в кнопке входа.",
+    "checks": [
+      "Fix label only",
+      "Proportionate verification",
+      "No unrelated security audit or broad test loop"
+    ]
+  },
+  {
+    "id": "artifact_evidence",
+    "skill": "sviat-engineering",
+    "setup": "Source tests pass; packaged app has not been exercised. Agent can run a local smoke script.",
+    "prompt": "Проверь, готово ли приложение к релизу.",
+    "checks": [
+      "Run accessible required checks",
+      "Distinguish source, built artifact and released behavior",
+      "Identify concrete remaining access or capability gaps"
+    ]
+  },
+  {
+    "id": "explicit_review",
+    "skill": "sviat-engineering",
+    "setup": "A bounded code change in a fixture with collaboration available.",
+    "prompt": "Исправь и затем запусти независимое ревью.",
+    "checks": [
+      "Honor requested independent review",
+      "Do not repeat successful checks without invalidation"
+    ]
+  },
+  {
+    "id": "plan_revision",
+    "skill": "easy-prd",
+    "setup": "Standard docs: S027 done; S028/S029 planned; STATE.md owns status. Existing stack is fixed.",
+    "prompt": "Убери S028 и S029 в бэклог, подготовь S030 для полировки текущей панели.",
+    "checks": [
+      "Preserve S027 and existing stack",
+      "Update affected scope, dependencies and criteria",
+      "One mutable status owner",
+      "No implementation or full rediscovery"
+    ]
+  },
+  {
+    "id": "plan_defer_only",
+    "skill": "easy-prd",
+    "setup": "All remaining work is intentionally deferred by user.",
+    "prompt": "Отложи оставшиеся слайсы, новых пока не добавляй.",
+    "checks": [
+      "Record deferral without inventing a ready slice",
+      "Preserve useful backlog content"
+    ]
+  },
+  {
+    "id": "brief_write",
+    "skill": "unpack-product-idea",
+    "setup": "Conversation already identifies audience, problem, journey, MVP and intended use without contradictions.",
+    "prompt": "Собери бриф из обсужденного.",
+    "checks": [
+      "Save brief in same turn",
+      "Label assumptions",
+      "No redundant confirmation or new architecture"
+    ]
+  },
+  {
+    "id": "brief_interview",
+    "skill": "unpack-product-idea",
+    "setup": "Only an early product idea is supplied.",
+    "prompt": "Хочу придумать приложение для подготовки к выступлениям.",
+    "checks": [
+      "One main question about the largest uncertainty",
+      "No invented requirements or full questionnaire"
+    ]
+  },
+  {
+    "id": "adr_no_decision",
+    "skill": "adr-logger",
+    "setup": "Read-only diagnosis; no accepted architecture decision; no per-task logging policy.",
+    "prompt": "Объясни причину ошибки, без правок.",
+    "checks": [
+      "No filesystem writes",
+      "No empty ADR entry"
+    ]
+  },
+  {
+    "id": "adr_existing_log",
+    "skill": "adr-logger",
+    "setup": "Existing DECISIONS.md; user accepted an ownership-contract change.",
+    "prompt": "Запиши это решение.",
+    "checks": [
+      "Use existing decision log",
+      "Record source and consequences",
+      "No second ADR directory"
+    ]
+  },
+  {
+    "id": "adr_daily",
+    "skill": "adr-logger",
+    "setup": "Project explicitly requires one daily entry per task and permits documentation edits.",
+    "prompt": "Исправь опечатку и запиши результат по нашему правилу.",
+    "checks": [
+      "One brief daily entry",
+      "No claim of architectural change"
+    ]
+  },
+  {
+    "id": "manager_bounded",
+    "skill": "adhd-manager",
+    "setup": "Collaboration available; one cohesive feature, agreed deliverable is one verified branch.",
+    "prompt": "Используй $adhd-manager для этой одной задачи.",
+    "checks": [
+      "One executor owns diagnosis, implementation and focused checks",
+      "No mandatory independent integrator",
+      "Branch delivery boundary recorded"
+    ]
+  },
+  {
+    "id": "manager_integrate",
+    "skill": "adhd-manager",
+    "setup": "Two independent task branches must be combined into the agreed integration branch.",
+    "prompt": "Объедини готовые задачи и проверь общий результат.",
+    "checks": [
+      "Revision and ownership checks",
+      "Cross-task integration and verification",
+      "Do not mark done from separate worker branches"
+    ]
+  },
+  {
+    "id": "manager_model",
+    "skill": "adhd-manager",
+    "setup": "Runtime exposes a new frontier model, an everyday model and a fast model; a login copy edit and permission-enforcement change are separate tasks.",
+    "prompt": "Подбери исполнителей в balanced режиме.",
+    "checks": [
+      "Select supported models by runtime role",
+      "Risk follows behavior rather than filename",
+      "No mandatory xhigh for copy edit",
+      "Permission checks preserved"
+    ]
+  },
+  {
+    "id": "engineering_negative_local_edit",
+    "skill": "sviat-engineering",
+    "setup": "A fixture has a typo in a static button label; expose the skill catalog without loading this skill.",
+    "prompt": "Fix the typo in this button label.",
+    "checks": [
+      "Complete the local edit without invoking sviat-engineering",
+      "No architecture investigation or unrelated tests"
+    ]
+  },
+  {
+    "id": "prd_small_gap",
+    "skill": "easy-prd",
+    "setup": "A brief specifies a personal task list, persistence, create/list/complete actions and first-version exclusions. Whether completed items stay visible is the only unresolved behavior.",
+    "prompt": "Turn this brief into a small implementation plan.",
+    "checks": [
+      "Ask only about the material missing behavior or label an appropriate assumption",
+      "Do not stop solely to recommend a separate discovery skill",
+      "Prepare unaffected planning content"
+    ]
+  },
+  {
+    "id": "slice_context_loading",
+    "skill": "easy-prd",
+    "setup": "A fixture generated from documentation-model.md contains a ready label-change slice linking a large technical document with unrelated auth and deployment sections. Evaluate an implementation agent using that generated AGENTS.md, not the planning skill.",
+    "prompt": "Implement the ready label-change slice.",
+    "checks": [
+      "Read current state and selected slice",
+      "Use only relevant linked sections if needed",
+      "Complete and verify the scoped change without full document-stack reading"
+    ]
+  },
+  {
+    "id": "plan_update_concise",
+    "skill": "easy-prd",
+    "setup": "A maintained Compact plan has one planned optional export slice and no dependent work.",
+    "prompt": "Defer the export slice to the backlog.",
+    "checks": [
+      "Update the existing status owner preserving useful scope",
+      "No new discovery or unrelated platform refresh",
+      "Report the deferral without an unrelated full-plan summary"
+    ]
+  }
+]
