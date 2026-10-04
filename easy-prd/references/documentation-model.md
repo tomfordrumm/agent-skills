@@ -73,6 +73,8 @@ Leave local class boundaries and helper structure to the implementation agent un
 
 `STATE.md` is the only operational status source. It names the current milestone, active or first ready slice, slice statuses, blockers, last verified behavior, and exact next action.
 
+Keep the latest state and current verification evidence, replacing outdated snapshots rather than appending a log for every task. When history is useful, store it separately and load it only when needed; do not include it in required reading.
+
 ### DECISIONS.md
 
 For each significant decision, record its ID, status, date, source, context, choice, rationale, consequences, and any decision it replaces. Keep decisions, proposals, assumptions, and open questions distinct.
